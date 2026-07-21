@@ -137,6 +137,7 @@ public class LevelPathScreen : MonoBehaviour
 
     IEnumerator HopRoutine(Vector2 from, Vector2 to)
     {
+        AudioManager.Play("hop");
         float t = 0f;
         while (t < HopDuration)
         {

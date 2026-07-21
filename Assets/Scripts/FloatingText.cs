@@ -1,46 +1,68 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
-/// Rising, fading text in world space (e.g. character names on big matches).
-/// Uses TextMesh so no TMP package is required.
+/// Poppy world-space callout text (character names on big matches):
+/// bold TMP with dark outline, pops in with overshoot and a slight random
+/// tilt, then rises and fades out.
 public class FloatingText : MonoBehaviour
 {
-    public static void Spawn(Vector3 pos, string text)
-    {
-        Create(pos + new Vector3(0.05f, -0.05f, 0f), text, new Color(0.2f, 0.1f, 0.03f), 51); // drop shadow
-        Create(pos, text, Color.white, 52);
-    }
+    const float PopDuration = 0.22f;
+    const float RiseDuration = 0.95f;
 
-    static void Create(Vector3 pos, string text, Color color, int sortingOrder)
+    public static void Spawn(Vector3 pos, string text, Color color)
     {
         var go = new GameObject("FloatingText");
         go.transform.position = pos;
-        var tm = go.AddComponent<TextMesh>();
-        tm.text = text;
-        tm.fontSize = 72;
-        tm.characterSize = 0.055f;
-        tm.fontStyle = FontStyle.Bold;
-        tm.anchor = TextAnchor.MiddleCenter;
-        tm.alignment = TextAlignment.Center;
-        tm.color = color;
-        go.GetComponent<MeshRenderer>().sortingOrder = sortingOrder;
+
+        var tmp = go.AddComponent<TextMeshPro>();
+        tmp.text = text;
+        tmp.fontSize = 9f;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.enableWordWrapping = false;
+        tmp.color = color;
+        tmp.outlineWidth = 0.28f;
+        tmp.outlineColor = new Color32(40, 24, 12, 255);
+        tmp.rectTransform.sizeDelta = new Vector2(10f, 3f);
+
+        var meshRenderer = go.GetComponent<MeshRenderer>();
+        if (meshRenderer != null) meshRenderer.sortingOrder = 60;
+
         go.AddComponent<FloatingText>();
     }
 
     IEnumerator Start()
     {
-        var tm = GetComponent<TextMesh>();
+        var tmp = GetComponent<TMP_Text>();
+        Color baseColor = tmp.color;
         Vector3 origin = transform.position;
-        Color baseColor = tm.color;
+        transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(-8f, 8f));
+        transform.localScale = Vector3.zero;
+
+        // pop in with overshoot (ease-out-back)
         float t = 0f;
-        const float duration = 1.1f;
-        while (t < duration)
+        while (t < PopDuration)
         {
             t += Time.deltaTime;
-            float p = Mathf.Clamp01(t / duration);
-            transform.position = origin + Vector3.up * (0.9f * (1f - (1f - p) * (1f - p)));
-            float alpha = p < 0.65f ? 1f : 1f - (p - 0.65f) / 0.35f;
-            tm.color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            float p = Mathf.Clamp01(t / PopDuration);
+            const float k = 2.2f;
+            float scale = 1f + (k + 1f) * Mathf.Pow(p - 1f, 3f) + k * Mathf.Pow(p - 1f, 2f);
+            transform.localScale = Vector3.one * scale;
+            yield return null;
+        }
+        transform.localScale = Vector3.one;
+
+        // rise, grow slightly, fade near the end
+        t = 0f;
+        while (t < RiseDuration)
+        {
+            t += Time.deltaTime;
+            float p = Mathf.Clamp01(t / RiseDuration);
+            transform.position = origin + Vector3.up * (0.85f * p);
+            transform.localScale = Vector3.one * (1f + 0.08f * p);
+            float alpha = p < 0.6f ? 1f : 1f - (p - 0.6f) / 0.4f;
+            tmp.color = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
             yield return null;
         }
         Destroy(gameObject);

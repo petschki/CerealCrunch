@@ -17,6 +17,17 @@ public class CerealBoard : MonoBehaviour
 
     static readonly string[] SpriteNames = { "raisin", "hazelnut", "oats", "cranberry", "banana", "blueberry", "cornflake" };
     static readonly string[] CharacterNames = { "Ray Sin", "Hazel Nuts", "Oatis", "Cran Berry", "B-Nana", "Barry Blue", "Corny Flake" };
+    // signature color per character for the callout text
+    static readonly Color[] CharacterColors =
+    {
+        new Color(0.76f, 0.42f, 0.95f), // Ray Sin — violet
+        new Color(0.95f, 0.62f, 0.32f), // Hazel Nuts — warm brown-orange
+        new Color(0.93f, 0.76f, 0.35f), // Oatis — golden tan
+        new Color(1f, 0.32f, 0.36f),    // Cran Berry — bright red
+        new Color(1f, 0.85f, 0.25f),    // B-Nana — banana yellow
+        new Color(0.36f, 0.6f, 1f),     // Barry Blue — bright blue
+        new Color(1f, 0.6f, 0.16f)      // Corny Flake — orange
+    };
     const string LevelPrefsKey = "cereal_level";
 
     // ---------- Level system ----------
@@ -119,6 +130,7 @@ public class CerealBoard : MonoBehaviour
             PlayerPrefs.DeleteKey(LevelPrefsKey);
 
         _ = AdsManager.Instance; // initialize early so ads are preloaded
+        _ = AudioManager.Instance; // starts the music loop
         LoadSprites();
         SetupCamera();
         BuildTableBackground();
@@ -383,6 +395,7 @@ public class CerealBoard : MonoBehaviour
     {
         busy = true;
         lastCascade = 0;
+        AudioManager.Play("swap");
 
         SwapInGrid(a, b);
         a.MoveTo(new Vector3(a.X, a.Y, 0f), SwapDuration);
@@ -399,6 +412,7 @@ public class CerealBoard : MonoBehaviour
         else
         {
             // Invalid move: swap back, does not cost a move
+            AudioManager.Play("invalid");
             SwapInGrid(a, b);
             a.MoveTo(new Vector3(a.X, a.Y, 0f), SwapDuration);
             b.MoveTo(new Vector3(b.X, b.Y, 0f), SwapDuration);
@@ -417,6 +431,7 @@ public class CerealBoard : MonoBehaviour
         if (score >= cfg.TargetScore)
         {
             state = GameState.Won;
+            AudioManager.Play("win");
             PlayerPrefs.SetInt(LevelPrefsKey, level + 1);
             PlayerPrefs.Save();
             ui.ShowWin(level + 1, () =>
@@ -430,6 +445,7 @@ public class CerealBoard : MonoBehaviour
         else if (movesLeft <= 0)
         {
             state = GameState.Lost;
+            AudioManager.Play("lose");
             ui.ShowLose(
                 !rescueUsed && AdsManager.Instance.RewardedAvailable,
                 () => AdsManager.Instance.ShowRewarded(earned =>
@@ -463,6 +479,8 @@ public class CerealBoard : MonoBehaviour
 
             lastCascade++;
             score += matches.Count * 10 * lastCascade;
+            // cascades rise in pitch — the classic match-3 reward ladder
+            AudioManager.Play("crunch", 1f + 0.12f * (lastCascade - 1));
             ui.SetHud(level, score, cfg.TargetScore, movesLeft);
             ShowCharacterCallout(matches);
 
@@ -503,7 +521,7 @@ public class CerealBoard : MonoBehaviour
             center += piece.transform.position;
         center /= best.Count;
 
-        FloatingText.Spawn(center, CharacterNames[best[0].Type] + "!");
+        FloatingText.Spawn(center, CharacterNames[best[0].Type] + "!", CharacterColors[best[0].Type]);
     }
 
     List<CerealPiece> FindMatches()
@@ -803,6 +821,7 @@ public class CerealBoard : MonoBehaviour
 
     IEnumerator ReshuffleRoutine()
     {
+        AudioManager.Play("swap", 0.75f);
         ReshuffleTypesOnly();
         foreach (var piece in grid)
             if (piece != null)

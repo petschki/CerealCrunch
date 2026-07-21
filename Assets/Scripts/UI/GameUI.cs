@@ -196,7 +196,11 @@ public class GameUI : MonoBehaviour
         sprites.selectedSprite = ButtonSprite;
         sprites.pressedSprite = ButtonPressedSprite;
         button.spriteState = sprites;
-        button.onClick.AddListener(() => onClick?.Invoke());
+        button.onClick.AddListener(() =>
+        {
+            AudioManager.Play("button");
+            onClick?.Invoke();
+        });
 
         var text = CreateText("Label", rt, label, 44f, Color.white);
         Stretch(text.rectTransform);
