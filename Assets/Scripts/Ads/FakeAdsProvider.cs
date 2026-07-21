@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-/// Platzhalter-Anbieter für die Entwicklung: simuliert Ladezeiten und zeigt
-/// bildschirmfüllende Fake-Anzeigen per OnGUI. Verhält sich wie ein echtes
-/// SDK (Vorladen, Countdown, Abbruch beim Rewarded ohne Belohnung).
+/// Placeholder provider for development: simulates load times and shows
+/// fullscreen fake ads via OnGUI. Behaves like a real SDK (preloading,
+/// countdown, cancelling a rewarded ad yields no reward).
 public class FakeAdsProvider : MonoBehaviour, IAdsProvider
 {
     enum AdKind { None, Interstitial, Rewarded }
@@ -76,7 +76,7 @@ public class FakeAdsProvider : MonoBehaviour, IAdsProvider
     void OnGUI()
     {
         if (current == AdKind.None) return;
-        GUI.depth = -100; // über allem anderen zeichnen
+        GUI.depth = -100; // draw on top of everything else
 
         GUI.color = new Color(0.09f, 0.11f, 0.18f, 0.98f);
         GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Texture2D.whiteTexture);
@@ -112,7 +112,7 @@ public class FakeAdsProvider : MonoBehaviour, IAdsProvider
             GUI.Label(new Rect(0, cy, Screen.width, Screen.height * 0.08f),
                 Mathf.CeilToInt(remaining).ToString(), big);
 
-            // Rewarded darf abgebrochen werden — dann gibt es keine Belohnung
+            // Rewarded ads can be cancelled — no reward in that case
             if (current == AdKind.Rewarded &&
                 GUI.Button(new Rect(cx - 140, cy + Screen.height * 0.12f, 280, Screen.height * 0.06f),
                     "Abbrechen (keine Belohnung)", button))

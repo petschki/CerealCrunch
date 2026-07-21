@@ -21,10 +21,10 @@
     </radialGradient>
   </defs>
 
-  <!-- Wand -->
+  <!-- Wall -->
   <rect x="0" y="0" width="1024" height="1180" fill="#f8e6a8"/>
 
-  <!-- Fenster links oben -->
+  <!-- Window at the top left -->
   <g>
     <rect x="40" y="80" width="280" height="270" rx="12" fill="#fdfaf0" stroke="#c9a86a" stroke-width="9"/>
     <rect x="60" y="100" width="118" height="112" fill="#cfe8f4"/>
@@ -35,7 +35,7 @@
     <path d="M30 66 q 36 150 0 300 q 70 -12 82 -288 q -46 -16 -82 -12 Z" fill="#a8d4ec" stroke="#7fb2d8" stroke-width="7"/>
   </g>
 
-  <!-- Kreidetafel rechts oben -->
+  <!-- Chalkboard at the top right -->
   <g>
     <rect x="640" y="90" width="350" height="240" rx="12" fill="#8a6234" stroke="#6e4c24" stroke-width="9"/>
     <rect x="666" y="116" width="298" height="188" rx="8" fill="#37464a"/>
@@ -44,7 +44,7 @@
     <path d="M710 265 h 100" stroke="#e8ecec" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
   </g>
 
-  <!-- Konfetti, Wolken, Stern -->
+  <!-- Confetti, clouds, star -->
   <g opacity="0.9">
     <circle cx="420" cy="90" r="12" fill="#e880b0"/>
     <circle cx="560" cy="60" r="10" fill="#7ec8c0"/>
@@ -58,10 +58,10 @@
     <path d="M 850 420 a 20 20 0 0 1 38 -9 a 16 16 0 0 1 27 11 a 13 13 0 0 1 -11 13 l -44 0 a 15 15 0 0 1 -10 -15 Z" fill="#ffffff" opacity="0.85"/>
   </g>
 
-  <!-- Drei Zerealien-Spender -->
+  <!-- Three cereal dispensers -->
   <g>
     <rect x="70" y="990" width="884" height="100" rx="22" fill="#b8c4cc" stroke="#8a99a4" stroke-width="7"/>
-    <!-- Spender 1: bunte Ringe -->
+    <!-- Dispenser 1: colorful rings -->
     <g>
       <rect x="90" y="520" width="220" height="440" rx="26" fill="url(#glassP)" stroke="#93a3ac" stroke-width="8"/>
       <rect x="78" y="490" width="244" height="48" rx="18" fill="#aab8c0" stroke="#8a99a4" stroke-width="7"/>
@@ -78,7 +78,7 @@
         <circle cx="180" cy="890" r="24" stroke="#68b8b0"/>
       </g>
     </g>
-    <!-- Spender 2: bunte Ringe -->
+    <!-- Dispenser 2: colorful rings -->
     <g>
       <rect x="402" y="520" width="220" height="440" rx="26" fill="url(#glassP)" stroke="#93a3ac" stroke-width="8"/>
       <rect x="390" y="490" width="244" height="48" rx="18" fill="#aab8c0" stroke="#8a99a4" stroke-width="7"/>
@@ -95,7 +95,7 @@
         <circle cx="495" cy="893" r="24" stroke="#e87098"/>
       </g>
     </g>
-    <!-- Spender 3: Schoko-Kugeln -->
+    <!-- Dispenser 3: chocolate balls -->
     <g>
       <rect x="714" y="520" width="220" height="440" rx="26" fill="url(#glassP)" stroke="#93a3ac" stroke-width="8"/>
       <rect x="702" y="490" width="244" height="48" rx="18" fill="#aab8c0" stroke="#8a99a4" stroke-width="7"/>
@@ -112,13 +112,13 @@
     </g>
   </g>
 
-  <!-- Tisch: Karo-Decke, Holzkante, Front -->
+  <!-- Table: gingham cloth, wooden edge, front -->
   <rect x="0" y="1180" width="1024" height="420" fill="url(#checkOrangeP)"/>
   <rect x="0" y="1180" width="1024" height="14" fill="#ffffff" opacity="0.6"/>
   <rect x="0" y="1600" width="1024" height="30" fill="#8f5e2e"/>
   <rect x="0" y="1630" width="1024" height="418" fill="url(#checkBlueP)"/>
 
-  <!-- Milchkanne links auf dem Tisch (obere Hälfte bleibt sichtbar) -->
+  <!-- Milk jug on the table, left (upper half stays visible) -->
   <g>
     <ellipse cx="150" cy="1330" rx="115" ry="24" fill="#4a3210" opacity="0.25"/>
     <path d="M80 1080 q -20 130 12 230 q 60 24 120 0 q 30 -100 10 -230 q -22 -28 -32 -64 l -76 0 q -12 36 -34 64 Z"
@@ -128,7 +128,7 @@
     <path d="M100 1140 q 5 100 20 144" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" opacity="0.8"/>
   </g>
 
-  <!-- Schüsseln (werden im Spiel größtenteils vom Board verdeckt) -->
+  <!-- Bowls (mostly covered by the board in-game) -->
   <g>
     <ellipse cx="480" cy="1420" rx="130" ry="22" fill="#4a3210" opacity="0.22"/>
     <g fill="#e8a83c" stroke="#a8641a" stroke-width="4">
@@ -149,7 +149,7 @@
     <ellipse cx="810" cy="1308" rx="111" ry="23" fill="none" stroke="#c06888" stroke-width="7"/>
   </g>
 
-  <!-- Unterer sichtbarer Streifen: Obstteller und Löffel -->
+  <!-- Lower visible strip: fruit plate and spoons -->
   <g>
     <ellipse cx="200" cy="1950" rx="150" ry="34" fill="#3a5a78" opacity="0.3"/>
     <ellipse cx="200" cy="1930" rx="150" ry="38" fill="#f4f8fb" stroke="#8fa9b6" stroke-width="7"/>

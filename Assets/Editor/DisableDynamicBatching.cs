@@ -2,9 +2,9 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-/// Dynamic Batching ist in Unity 6 deprecated und standardmäßig trotzdem aktiv.
-/// Dieses Skript schaltet es beim Editor-Start für alle Ziel-Plattformen ab
-/// (Static Batching bleibt an).
+/// Dynamic batching is deprecated in Unity 6 yet still enabled by default.
+/// This script disables it for all target platforms on editor startup
+/// (static batching stays enabled).
 [InitializeOnLoad]
 public static class DisableDynamicBatching
 {
@@ -15,7 +15,7 @@ public static class DisableDynamicBatching
 
     static void Apply()
     {
-        // SetBatchingForPlatform ist je nach Unity-Version internal — daher Reflection
+        // SetBatchingForPlatform is internal in some Unity versions — hence reflection
         var set = typeof(PlayerSettings).GetMethod("SetBatchingForPlatform",
             BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
         var get = typeof(PlayerSettings).GetMethod("GetBatchingForPlatform",
@@ -36,16 +36,16 @@ public static class DisableDynamicBatching
             {
                 var args = new object[] { target, 0, 0 };
                 get.Invoke(null, args);
-                if ((int)args[2] == 0) continue; // Dynamic Batching ist schon aus
+                if ((int)args[2] == 0) continue; // dynamic batching already off
             }
-            set.Invoke(null, new object[] { target, 1, 0 }); // static an, dynamic aus
+            set.Invoke(null, new object[] { target, 1, 0 }); // static on, dynamic off
             changed = true;
         }
 
         if (changed)
         {
             AssetDatabase.SaveAssets();
-            Debug.Log("DisableDynamicBatching: Dynamic Batching wurde deaktiviert.");
+            Debug.Log("DisableDynamicBatching: dynamic batching has been disabled.");
         }
     }
 }

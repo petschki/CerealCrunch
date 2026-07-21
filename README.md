@@ -1,25 +1,25 @@
 # CerealCrunch
 
-Match-3-Spiel (iOS, Hochformat) mit Frühstückszerealien-Charakteren: Ray Sin, Hazel Nuts, Oatis, Cran Berry, B-Nana, Barry Blue und Corny Flake.
+Match-3 game (iOS, portrait) starring breakfast cereal characters: Ray Sin, Hazel Nuts, Oatis, Cran Berry, B-Nana, Barry Blue and Corny Flake.
 
-Unity 6000.5.4f1 · keine externen Pakete.
+Unity 6000.5.4f1 · no external packages.
 
 ## Features
 
-- Match-3 mit erweiterten Regeln: gerade Reihen ab 3, 2×2-Quadrate/Rechtecke, Über-Eck-Ketten
-- Level-System mit per Monte-Carlo-Simulation kalibrierter Schwierigkeitskurve (5 → 7 Sorten)
-- Comic-Charaktere mit Namens-Popups bei großen Matches
-- Ad-Gerüst (`IAdsProvider`): Interstitials mit Frequency Capping, Rewarded-Rettungszüge (+5) — aktuell Fake-Provider, echtes SDK andockbar
-- Hoch- und Querformat, jeweils eigener Cartoon-Hintergrund
+- Match-3 with extended rules: straight runs of 3+, 2×2 squares/rectangles, around-the-corner chains
+- Level system with a difficulty curve calibrated via Monte Carlo simulation (5 → 7 cereal types)
+- Cartoon characters with name callouts on big matches
+- Ad scaffold (`IAdsProvider`): interstitials with frequency capping, rewarded rescue moves (+5) — currently a fake provider, real SDK pluggable
+- Portrait and landscape support, each with its own cartoon background
 
-## Struktur
+## Structure
 
-- `Assets/Scripts/` — Spiellogik (`CerealBoard`, `CerealPiece`, `FloatingText`) und `Ads/`
-- `Assets/Editor/` — Sprite-Importeinstellungen, Scene-Builder (batchmode-fähig), Portrait-/Batching-Konfiguration
-- `Assets/Resources/Cereals/` — Sprites und Hintergründe (generiert aus `Tools/art/*.svg` via `rsvg-convert`)
-- `Tools/art/` — SVG-Quellen aller Grafiken
-- `Tools/balance/` — Balance-Simulation (`uv run python balance.py`)
+- `Assets/Scripts/` — game logic (`CerealBoard`, `CerealPiece`, `FloatingText`) and `Ads/`
+- `Assets/Editor/` — sprite import settings, scene builder (batch-mode capable), portrait/batching configuration
+- `Assets/Resources/Cereals/` — sprites and backgrounds (generated from `Tools/art/*.svg` via `rsvg-convert`)
+- `Tools/art/` — SVG sources for all artwork
+- `Tools/balance/` — balance simulation (`uv run python balance.py`)
 
-## Starten
+## Getting started
 
-Projekt in Unity öffnen, Szene `Assets/Scenes/Main.unity` laden, Play. Das Spielfeld wird zur Laufzeit per Code aufgebaut.
+Open the project in Unity, load the scene `Assets/Scenes/Main.unity`, press Play. The board is built at runtime from code.

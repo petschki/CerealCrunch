@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// Match-3-Board: Grid-Verwaltung, Eingabe (Swipe), Match-Erkennung,
-/// Auflösen mit Kaskaden, Nachfüllen, Level-System und Punktestand.
+/// Match-3 board: grid management, swipe input, match detection,
+/// cascade resolution, refill, level system and scoring.
 public class CerealBoard : MonoBehaviour
 {
-    [Tooltip("Für die Entwicklung: setzt den Levelfortschritt bei jedem Start auf Level 1 zurück")]
+    [Tooltip("Development helper: resets level progress to level 1 on every start")]
     public bool ResetProgressOnStart = true;
 
     public int Width = 8;
@@ -19,13 +19,13 @@ public class CerealBoard : MonoBehaviour
     static readonly string[] CharacterNames = { "Ray Sin", "Hazel Nuts", "Oatis", "Cran Berry", "B-Nana", "Barry Blue", "Corny Flake" };
     const string LevelPrefsKey = "cereal_level";
 
-    // ---------- Level-System ----------
-    // Balance per Monte-Carlo-Simulation kalibriert (Sägezahn-Kurve):
-    // Level 1-3: 5 Sorten, Gewinnrate ~98% → ~68%
-    // Level 4-7: 6 Sorten, ~82% → ~42%
-    // Level 8+:  7 Sorten, ~76% → fallend
-    // 4 Sorten sind mit Quadrat- und Über-Eck-Regeln unspielbar leicht
-    // (Endlos-Kaskaden, ~3800 Punkte/Zug) und werden nicht verwendet.
+    // ---------- Level system ----------
+    // Balance calibrated via Monte Carlo simulation (sawtooth curve):
+    // levels 1-3: 5 types, win rate ~98% → ~68%
+    // levels 4-7: 6 types, ~82% → ~42%
+    // levels 8+:  7 types, ~76% → declining
+    // 4 types are unplayably easy with the square and around-the-corner
+    // rules (endless cascades, ~3800 points per move) and are never used.
     struct LevelConfig
     {
         public int TypeCount;
@@ -72,7 +72,7 @@ public class CerealBoard : MonoBehaviour
     int score;
     int lastCascade;
     bool busy;
-    bool rescueUsed; // Rewarded-Rettung gibt es nur einmal pro Levelversuch
+    bool rescueUsed; // the rewarded-ad rescue is available once per level attempt
 
     CerealPiece dragPiece;
     Vector2 dragStartWorld;
@@ -82,7 +82,7 @@ public class CerealBoard : MonoBehaviour
         if (ResetProgressOnStart)
             PlayerPrefs.DeleteKey(LevelPrefsKey);
 
-        _ = AdsManager.Instance; // früh initialisieren, damit Anzeigen vorgeladen sind
+        _ = AdsManager.Instance; // initialize early so ads are preloaded
         LoadSprites();
         SetupCamera();
         BuildTableBackground();
@@ -111,14 +111,14 @@ public class CerealBoard : MonoBehaviour
         cam.clearFlags = CameraClearFlags.SolidColor;
         cam.backgroundColor = new Color(0.985f, 0.945f, 0.87f);
 
-        // Board plus Rand muss in beide Richtungen passen
+        // The board plus margin must fit in both directions
         float halfHeight = Height / 2f + 1.6f;
         float halfWidth = (Width / 2f + 0.7f) / cam.aspect;
         float size = Mathf.Max(halfHeight, halfWidth);
         cam.orthographicSize = size;
 
-        // Hochformat: Board unten platzieren (volle Breite), oben Luft für
-        // HUD und Hintergrund. Querformat: Board mittig wie bisher.
+        // Portrait: place the board at the bottom (full width), leaving room
+        // for HUD and background at the top. Landscape: keep the board centered.
         float camY;
         if (cam.aspect < 1f)
         {
@@ -132,10 +132,10 @@ public class CerealBoard : MonoBehaviour
         cam.transform.position = new Vector3((Width - 1) / 2f, camY, -10f);
     }
 
-    /// Müslischüssel-Foto als Hintergrund, skaliert so, dass es den Kamerabereich abdeckt.
+    /// Cartoon breakfast scene as background, scaled to cover the camera view.
     void BuildTableBackground()
     {
-        // Im Hochformat die eigens komponierte Portrait-Variante verwenden
+        // In portrait, use the purpose-composed portrait variant
         var sprite = Camera.main.aspect < 1f
             ? Resources.Load<Sprite>("Cereals/bowl_table_portrait")
             : Resources.Load<Sprite>("Cereals/bowl_table");
@@ -179,7 +179,7 @@ public class CerealBoard : MonoBehaviour
         }
     }
 
-    // ---------- Level laden ----------
+    // ---------- Level loading ----------
 
     void LoadLevel(int newLevel)
     {
@@ -219,9 +219,9 @@ public class CerealBoard : MonoBehaviour
         }
     }
 
-    /// Zufälliger Typ (aus den im Level erlaubten Sorten), der weder ein fertiges
-    /// 3er-Match noch ein 2x2-Quadrat erzeugt. Wird beim Befüllen von links unten
-    /// nach rechts oben aufgerufen, daher sind links und unterhalb schon Typen gesetzt.
+    /// Random type (from the types allowed in this level) that creates neither
+    /// a finished 3-in-a-row nor a 2x2 square. Called while filling from bottom-left
+    /// to top-right, so cells to the left and below already have their types set.
     int RandomTypeWithoutMatch(int x, int y)
     {
         var banned = new HashSet<int>();
@@ -251,7 +251,7 @@ public class CerealBoard : MonoBehaviour
         return piece;
     }
 
-    // ---------- Eingabe ----------
+    // ---------- Input ----------
 
     void Update()
     {
@@ -291,7 +291,7 @@ public class CerealBoard : MonoBehaviour
         }
     }
 
-    // ---------- Spielablauf ----------
+    // ---------- Game flow ----------
 
     IEnumerator SwapRoutine(CerealPiece a, CerealPiece b)
     {
@@ -311,7 +311,7 @@ public class CerealBoard : MonoBehaviour
         }
         else
         {
-            // Ungültiger Zug: zurücktauschen, kostet keinen Zug
+            // Invalid move: swap back, does not cost a move
             SwapInGrid(a, b);
             a.MoveTo(new Vector3(a.X, a.Y, 0f), SwapDuration);
             b.MoveTo(new Vector3(b.X, b.Y, 0f), SwapDuration);
@@ -372,8 +372,8 @@ public class CerealBoard : MonoBehaviour
         }
     }
 
-    /// Bei einem großen Match (ab 5 Teilen einer Sorte) ruft der Charakter
-    /// seinen Namen — Popup am Schwerpunkt der Gruppe.
+    /// On a big match (5+ pieces of one type) the character calls out
+    /// its name — popup at the group's centroid.
     void ShowCharacterCallout(List<CerealPiece> matches)
     {
         var byType = new Dictionary<int, List<CerealPiece>>();
@@ -403,7 +403,7 @@ public class CerealBoard : MonoBehaviour
     {
         bool[,] matched = new bool[Width, Height];
 
-        // 1) Gerade Reihen ab 3 (horizontal und vertikal)
+        // 1) Straight runs of 3+ (horizontal and vertical)
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width - 2; x++)
@@ -431,8 +431,8 @@ public class CerealBoard : MonoBehaviour
             }
         }
 
-        // 2) Quadrate/Rechtecke: jeder 2x2-Block gleicher Sorte.
-        //    Größere Rechtecke bestehen aus überlappenden 2x2-Blöcken.
+        // 2) Squares/rectangles: every 2x2 block of the same type.
+        //    Larger rectangles consist of overlapping 2x2 blocks.
         for (int x = 0; x < Width - 1; x++)
         {
             for (int y = 0; y < Height - 1; y++)
@@ -448,9 +448,9 @@ public class CerealBoard : MonoBehaviour
             }
         }
 
-        // 3) Über-Eck-Erweiterung: eine Reihe ab 2 gleicher Sorte kommt dazu,
-        //    sobald eines ihrer Teile bereits gematcht ist (Fixpunkt-Schleife,
-        //    damit auch Ketten über mehrere Ecken mitgenommen werden).
+        // 3) Around-the-corner extension: a run of 2+ of the same type joins
+        //    the match as soon as one of its pieces is already matched
+        //    (fixpoint loop so chains across multiple corners are included).
         bool changed = true;
         while (changed)
         {
@@ -489,8 +489,8 @@ public class CerealBoard : MonoBehaviour
         return result;
     }
 
-    /// Markiert eine komplette Reihe, wenn sie teilweise (aber nicht ganz) gematcht ist.
-    /// Liefert true, wenn dabei neue Teile hinzugekommen sind.
+    /// Marks a complete run if it is partially (but not fully) matched.
+    /// Returns true if new pieces were added.
     bool ExtendRun(bool[,] matched, int x, int y, int run, bool horizontal)
     {
         bool any = false, all = true;
@@ -553,7 +553,7 @@ public class CerealBoard : MonoBehaviour
         }
     }
 
-    // ---------- Deadlock-Behandlung ----------
+    // ---------- Deadlock handling ----------
 
     bool HasPossibleMove()
     {
@@ -594,7 +594,7 @@ public class CerealBoard : MonoBehaviour
         for (int i = y + 1; i < Height && grid[x, i].Type == type; i++) run++;
         if (run >= 3) return true;
 
-        // 2x2-Quadrate: alle vier Blöcke prüfen, in denen (x,y) liegen kann
+        // 2x2 squares: check all four blocks that could contain (x,y)
         for (int dx = -1; dx <= 0; dx++)
         {
             for (int dy = -1; dy <= 0; dy++)
@@ -637,7 +637,7 @@ public class CerealBoard : MonoBehaviour
 
     void OnGUI()
     {
-        if (AdsManager.IsShowingAd) return; // der FakeAdsProvider zeichnet gerade
+        if (AdsManager.IsShowingAd) return; // the ad provider is drawing its own UI
 
         var title = new GUIStyle(GUI.skin.label)
         {
@@ -660,7 +660,7 @@ public class CerealBoard : MonoBehaviour
 
         if (state == GameState.Playing) return;
 
-        // Abdunkeln + Overlay bei Sieg/Niederlage
+        // Dim the screen + win/lose overlay
         var oldColor = GUI.color;
         GUI.color = new Color(0f, 0f, 0f, 0.6f);
         GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Texture2D.whiteTexture);

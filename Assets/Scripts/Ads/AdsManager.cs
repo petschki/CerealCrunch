@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-/// Zentrale Anlaufstelle für Werbung, mit Frequency Capping für Interstitials.
-/// Erstellt sich bei erster Verwendung selbst und überlebt Szenenwechsel.
+/// Central entry point for ads, with frequency capping for interstitials.
+/// Creates itself on first use and survives scene changes.
 public class AdsManager : MonoBehaviour
 {
-    // Interstitials erst, wenn der Spieler "investiert" ist, und nie zu dicht
+    // Interstitials only once the player is invested, and never too frequent
     const int MinLevelForInterstitials = 3;
     const float InterstitialCooldownSeconds = 75f;
 
@@ -28,7 +28,7 @@ public class AdsManager : MonoBehaviour
         }
     }
 
-    /// Solange true, soll das Spiel weder Eingaben annehmen noch eigene UI zeichnen.
+    /// While true, the game should neither accept input nor draw its own UI.
     public static bool IsShowingAd { get; private set; }
 
     void Awake()
@@ -45,8 +45,8 @@ public class AdsManager : MonoBehaviour
 
     public bool RewardedAvailable => provider.RewardedReady;
 
-    /// Zeigt ein Interstitial, wenn Level und Cooldown es erlauben — sonst
-    /// (oder wenn keines geladen ist) geht es direkt mit onClosed weiter.
+    /// Shows an interstitial if level and cooldown allow it — otherwise
+    /// (or if none is loaded) continues directly with onClosed.
     public void MaybeShowInterstitial(int completedLevel, Action onClosed)
     {
         bool allowed = completedLevel >= MinLevelForInterstitials

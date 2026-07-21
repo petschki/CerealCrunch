@@ -1,13 +1,13 @@
 using System.Collections;
 using UnityEngine;
 
-/// Aufsteigender, ausblendender Text in Weltkoordinaten (z.B. Charakternamen
-/// bei großen Matches). Nutzt TextMesh, damit kein TMP-Paket nötig ist.
+/// Rising, fading text in world space (e.g. character names on big matches).
+/// Uses TextMesh so no TMP package is required.
 public class FloatingText : MonoBehaviour
 {
     public static void Spawn(Vector3 pos, string text)
     {
-        Create(pos + new Vector3(0.05f, -0.05f, 0f), text, new Color(0.2f, 0.1f, 0.03f), 51); // Schatten
+        Create(pos + new Vector3(0.05f, -0.05f, 0f), text, new Color(0.2f, 0.1f, 0.03f), 51); // drop shadow
         Create(pos, text, Color.white, 52);
     }
 

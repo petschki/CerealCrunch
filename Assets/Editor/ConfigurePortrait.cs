@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-/// Stellt die App auf reines Hochformat um (relevant für Device-Builds).
+/// Locks the app to portrait orientation (relevant for device builds).
 [InitializeOnLoad]
 public static class ConfigurePortrait
 {
@@ -22,6 +22,6 @@ public static class ConfigurePortrait
         PlayerSettings.allowedAutorotateToLandscapeLeft = false;
         PlayerSettings.allowedAutorotateToLandscapeRight = false;
         AssetDatabase.SaveAssets();
-        Debug.Log("ConfigurePortrait: App auf Hochformat (Portrait) umgestellt.");
+        Debug.Log("ConfigurePortrait: app locked to portrait orientation.");
     }
 }

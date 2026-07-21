@@ -6,12 +6,12 @@
       <stop offset="1" stop-color="#3d1b4d"/>
     </radialGradient>
   </defs>
-  <!-- Ray Sin: die fröhliche Rosine -->
+  <!-- Ray Sin: the cheerful raisin -->
   <ellipse cx="128" cy="134" rx="88" ry="72" fill="url(#g)" stroke="#2a1136" stroke-width="7" transform="rotate(-12 128 134)"/>
   <path d="M52 150 q14 16 30 18" fill="none" stroke="#3d1b4d" stroke-width="7" stroke-linecap="round" opacity="0.6"/>
   <path d="M180 84 q14 10 20 26" fill="none" stroke="#3d1b4d" stroke-width="7" stroke-linecap="round" opacity="0.6"/>
   <ellipse cx="90" cy="82" rx="24" ry="12" fill="#b98cc9" opacity="0.75" transform="rotate(-20 90 82)"/>
-  <!-- Gesicht -->
+  <!-- Face -->
   <g>
     <ellipse cx="102" cy="122" rx="15" ry="17" fill="#ffffff"/>
     <ellipse cx="154" cy="122" rx="15" ry="17" fill="#ffffff"/>

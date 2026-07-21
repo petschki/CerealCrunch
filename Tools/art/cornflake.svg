@@ -6,7 +6,7 @@
       <stop offset="1" stop-color="#a8641a"/>
     </radialGradient>
   </defs>
-  <!-- Corny Flake: der alberne Cornflake -->
+  <!-- Corny Flake: the goofy cornflake -->
   <path d="M128 36 C 172 30 210 62 216 104 C 222 146 204 178 178 200 C 152 222 108 228 76 208 C 44 188 32 152 40 114 C 48 76 84 42 128 36 Z"
         fill="url(#g)" stroke="#7a4310" stroke-width="7"/>
   <g fill="#c07a20" opacity="0.85">
@@ -17,7 +17,7 @@
     <ellipse cx="140" cy="196" rx="11" ry="7" transform="rotate(10 140 196)"/>
   </g>
   <path d="M74 78 q 20 -24 52 -28" fill="none" stroke="#fbdf9e" stroke-width="14" stroke-linecap="round" opacity="0.8"/>
-  <!-- Gesicht (albern: ungleiche Augen, schiefes Zahngrinsen) -->
+  <!-- Face (goofy: uneven eyes, crooked toothy grin) -->
   <g>
     <ellipse cx="100" cy="116" rx="17" ry="19" fill="#ffffff"/>
     <ellipse cx="156" cy="112" rx="13" ry="15" fill="#ffffff"/>

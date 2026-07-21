@@ -1,10 +1,10 @@
-"""Monte-Carlo-Simulation der CerealCrunch-Match-Regeln zur Level-Balance.
+"""Monte Carlo simulation of the CerealCrunch match rules for level balancing.
 
-Repliziert die Logik aus CerealBoard.cs:
-- gerade Reihen ab 3
-- 2x2-Quadrate
-- Ueber-Eck-Erweiterung (2er-Reihen an gematchten Teilen, Fixpunkt)
-- Kaskaden: score += count * 10 * cascade
+Replicates the logic from CerealBoard.cs:
+- straight runs of 3+
+- 2x2 squares
+- around-the-corner extension (runs of 2 attached to matched pieces, fixpoint)
+- cascades: score += count * 10 * cascade
 """
 import random
 import statistics
@@ -37,7 +37,7 @@ def fill_board(types):
 def find_matches(board):
     matched = [[False] * H for _ in range(W)]
 
-    # gerade Reihen
+    # straight runs
     for y in range(H):
         x = 0
         while x < W:
@@ -59,13 +59,13 @@ def find_matches(board):
                     matched[x][y + i] = True
             y += run
 
-    # 2x2-Quadrate
+    # 2x2 squares
     for x in range(W - 1):
         for y in range(H - 1):
             if board[x][y] == board[x + 1][y] == board[x][y + 1] == board[x + 1][y + 1]:
                 matched[x][y] = matched[x + 1][y] = matched[x][y + 1] = matched[x + 1][y + 1] = True
 
-    # Ueber-Eck-Erweiterung
+    # around-the-corner extension
     changed = True
     while changed:
         changed = False
@@ -102,7 +102,7 @@ def find_matches(board):
 
 
 def resolve(board, types):
-    """Kaskaden aufloesen, Punkte wie im Spiel zaehlen."""
+    """Resolve cascades, scoring exactly like the game."""
     score = 0
     cascade = 0
     while True:
@@ -160,8 +160,8 @@ def main():
     random.seed(42)
     games = 80
     num_moves = 15
-    print(f"{games} Partien x {num_moves} Zuege, 8x8")
-    print(f"{'Sorten':>6} {'Strategie':>10} {'Punkte/Zug Ø':>14} {'Median':>8} {'P25':>8} {'P75':>8}")
+    print(f"{games} games x {num_moves} moves, 8x8")
+    print(f"{'types':>6} {'strategy':>10} {'pts/move avg':>14} {'median':>8} {'P25':>8} {'P75':>8}")
     for types in (4, 5, 6):
         for greedy in (False, True):
             results = [play_game(types, num_moves, greedy) / num_moves for _ in range(games)]

@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-/// Ein einzelnes Zerealien-Teil auf dem Board.
-/// Bewegt sich selbst animiert zu einer Zielposition (Tweening per Coroutine).
+/// A single cereal piece on the board.
+/// Animates itself toward a target position (coroutine-based tweening).
 public class CerealPiece : MonoBehaviour
 {
     public int X;
@@ -43,7 +43,7 @@ public class CerealPiece : MonoBehaviour
         {
             t += Time.deltaTime;
             float p = Mathf.Clamp01(t / duration);
-            // Ease-out-quad: schnell starten, weich ankommen
+            // Ease-out quad: start fast, arrive softly
             p = 1f - (1f - p) * (1f - p);
             transform.position = Vector3.LerpUnclamped(start, target, p);
             yield return null;
@@ -52,7 +52,7 @@ public class CerealPiece : MonoBehaviour
         Moving = false;
     }
 
-    /// Kurzer "Pop" nach oben, dann auf Null skalieren — wird vor dem Destroy abgespielt.
+    /// Quick "pop", then scale down to zero — played before the piece is destroyed.
     public IEnumerator ClearRoutine()
     {
         Moving = true;
@@ -64,15 +64,15 @@ public class CerealPiece : MonoBehaviour
             t += Time.deltaTime;
             float p = Mathf.Clamp01(t / duration);
             float scale = p < 0.3f
-                ? Mathf.Lerp(1f, 1.25f, p / 0.3f)          // erst aufplustern
-                : Mathf.Lerp(1.25f, 0f, (p - 0.3f) / 0.7f); // dann verschwinden
+                ? Mathf.Lerp(1f, 1.25f, p / 0.3f)          // puff up first
+                : Mathf.Lerp(1.25f, 0f, (p - 0.3f) / 0.7f); // then vanish
             transform.localScale = baseScale * scale;
             yield return null;
         }
         Moving = false;
     }
 
-    /// Kleines Wackeln für ungültige Züge.
+    /// Small shake for invalid moves.
     public IEnumerator ShakeRoutine()
     {
         Moving = true;

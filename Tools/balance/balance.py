@@ -1,7 +1,7 @@
-"""Verifiziert die Level-Formel: simulierte Gewinnrate pro Level.
+"""Verifies the level formula: simulated win rate per level.
 
-Spielermodell: waehlt aus 2 zufaelligen gueltigen Zuegen den mit mehr
-sofort gematchten Teilen (zwischen Zufall und Greedy, wie ein Casual-Spieler).
+Player model: picks the better of 2 random valid moves by immediate match
+size (between random and greedy, like a casual player).
 """
 import random
 import statistics
@@ -44,7 +44,7 @@ def play_level(types, moves, target):
 def main():
     random.seed(7)
     games = 50
-    print(f"{'Level':>5} {'Sorten':>6} {'Zuege':>5} {'Ziel':>7} {'Gewinnrate':>10}")
+    print(f"{'level':>5} {'types':>6} {'moves':>5} {'target':>7} {'win rate':>10}")
     for level in range(1, 13):
         types, moves, target = level_config(level)
         wins = sum(play_level(types, moves, target) for _ in range(games))

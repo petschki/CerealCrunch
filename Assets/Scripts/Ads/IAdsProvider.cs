@@ -1,8 +1,8 @@
 using System;
 
-/// Abstraktion über den Werbeanbieter. Für den echten Betrieb eine Klasse
-/// schreiben, die dieses Interface mit dem SDK des Anbieters implementiert
-/// (z.B. Unity LevelPlay, AdMob) — der Rest des Spiels bleibt unverändert.
+/// Abstraction over the ad provider. For production, write a class that
+/// implements this interface using the provider's SDK (e.g. Unity LevelPlay,
+/// AdMob) — the rest of the game stays unchanged.
 public interface IAdsProvider
 {
     void Initialize();
@@ -10,10 +10,10 @@ public interface IAdsProvider
     bool InterstitialReady { get; }
     bool RewardedReady { get; }
 
-    /// Zeigt ein Interstitial; onClosed wird nach dem Schließen aufgerufen.
+    /// Shows an interstitial; onClosed is invoked after it is dismissed.
     void ShowInterstitial(Action onClosed);
 
-    /// Zeigt ein Rewarded Video; onFinished(true) nur, wenn die Belohnung
-    /// verdient wurde (Video zu Ende geschaut), sonst onFinished(false).
+    /// Shows a rewarded video; onFinished(true) only if the reward was
+    /// earned (video watched to the end), otherwise onFinished(false).
     void ShowRewarded(Action<bool> onFinished);
 }

@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-/// Baut die Hauptszene per Batchmode:
+/// Builds the main scene in batch mode:
 /// Unity -batchmode -executeMethod SceneBuilder.Build
 public static class SceneBuilder
 {
@@ -17,7 +17,7 @@ public static class SceneBuilder
         cam.clearFlags = CameraClearFlags.SolidColor;
         cam.backgroundColor = new Color(0.985f, 0.945f, 0.87f);
         cam.transform.position = new Vector3(3.5f, 3.8f, -10f);
-        cam.orthographicSize = 6f; // CerealBoard passt das zur Laufzeit ans Seitenverhältnis an
+        cam.orthographicSize = 6f; // CerealBoard adjusts this to the aspect ratio at runtime
 
         var board = new GameObject("Board");
         board.AddComponent<CerealBoard>();
@@ -27,7 +27,7 @@ public static class SceneBuilder
         EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene("Assets/Scenes/Main.unity", true) };
         AssetDatabase.SaveAssets();
 
-        Debug.Log("SceneBuilder: Main.unity erstellt.");
+        Debug.Log("SceneBuilder: Main.unity created.");
         if (Application.isBatchMode) EditorApplication.Exit(0);
     }
 }

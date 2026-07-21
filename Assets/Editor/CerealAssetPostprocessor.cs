@@ -1,6 +1,6 @@
 using UnityEditor;
 
-/// Stellt alle PNGs im Cereals-Ordner automatisch als Sprites ein.
+/// Automatically configures all PNGs in the Cereals folder as sprites.
 public class CerealAssetPostprocessor : AssetPostprocessor
 {
     void OnPreprocessTexture()
@@ -10,7 +10,7 @@ public class CerealAssetPostprocessor : AssetPostprocessor
         var importer = (TextureImporter)assetImporter;
         importer.textureType = TextureImporterType.Sprite;
         importer.spriteImportMode = SpriteImportMode.Single;
-        importer.spritePixelsPerUnit = 256f; // 256px-Sprite = 1 Welteinheit = 1 Grid-Zelle
+        importer.spritePixelsPerUnit = 256f; // 256px sprite = 1 world unit = 1 grid cell
         importer.mipmapEnabled = false;
         importer.alphaIsTransparency = true;
         importer.filterMode = UnityEngine.FilterMode.Bilinear;
