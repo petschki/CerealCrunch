@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <radialGradient id="g" cx="0.38" cy="0.35" r="0.95">
+      <stop offset="0" stop-color="#c98a4b"/>
+      <stop offset="0.6" stop-color="#a05f2c"/>
+      <stop offset="1" stop-color="#6f3c17"/>
+    </radialGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8c08a"/>
+      <stop offset="1" stop-color="#c99356"/>
+    </linearGradient>
+  </defs>
+  <!-- Hazel Nuts: die zwinkernde Haselnuss -->
+  <path d="M128 34 C 190 34 206 96 206 138 C 206 190 172 224 128 224 C 84 224 50 190 50 138 C 50 96 66 34 128 34 Z" fill="url(#g)" stroke="#4e2a0f" stroke-width="7"/>
+  <path d="M128 34 C 178 34 196 84 199 118 C 160 132 96 132 57 118 C 60 84 78 34 128 34 Z" fill="url(#cap)" stroke="#4e2a0f" stroke-width="7"/>
+  <circle cx="128" cy="52" r="7" fill="#8a5a28"/>
+  <ellipse cx="88" cy="182" rx="16" ry="24" fill="#e0a86b" opacity="0.5" transform="rotate(14 88 182)"/>
+  <!-- Gesicht (zwinkert) -->
+  <g>
+    <ellipse cx="102" cy="156" rx="14" ry="16" fill="#ffffff"/>
+    <circle cx="105" cy="159" r="7" fill="#3a2008"/>
+    <circle cx="107.5" cy="156.5" r="2.3" fill="#ffffff"/>
+    <path d="M140 152 q14 8 28 0" fill="none" stroke="#3a2008" stroke-width="7" stroke-linecap="round"/>
+    <path d="M100 188 Q128 206 158 186" fill="none" stroke="#3a2008" stroke-width="8" stroke-linecap="round"/>
+    <ellipse cx="82" cy="180" rx="10" ry="6" fill="#e0946a" opacity="0.6"/>
+    <ellipse cx="176" cy="178" rx="10" ry="6" fill="#e0946a" opacity="0.6"/>
+  </g>
+</svg>

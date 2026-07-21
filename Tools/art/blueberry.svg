@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <radialGradient id="g" cx="0.38" cy="0.33" r="0.95">
+      <stop offset="0" stop-color="#6d8fd4"/>
+      <stop offset="0.6" stop-color="#3d5cae"/>
+      <stop offset="1" stop-color="#243a7d"/>
+    </radialGradient>
+  </defs>
+  <!-- Barry Blue: die coole Heidelbeere mit Sonnenbrille -->
+  <circle cx="128" cy="132" r="84" fill="url(#g)" stroke="#16244f" stroke-width="7"/>
+  <g transform="translate(128 66)" fill="#243a7d" stroke="#16244f" stroke-width="4">
+    <path d="M0 -14 L6 -3 L17 -2 L8 6 L11 17 L0 11 L-11 17 L-8 6 L-17 -2 L-6 -3 Z"/>
+  </g>
+  <ellipse cx="92" cy="98" rx="22" ry="13" fill="#aebfe8" opacity="0.8" transform="rotate(-24 92 98)"/>
+  <!-- Sonnenbrille -->
+  <g>
+    <rect x="76" y="108" width="46" height="34" rx="14" fill="#101528" stroke="#0a0e1c" stroke-width="4"/>
+    <rect x="134" y="108" width="46" height="34" rx="14" fill="#101528" stroke="#0a0e1c" stroke-width="4"/>
+    <path d="M122 118 h12" stroke="#0a0e1c" stroke-width="6" stroke-linecap="round"/>
+    <path d="M76 118 h-14" stroke="#0a0e1c" stroke-width="6" stroke-linecap="round"/>
+    <path d="M180 118 h14" stroke="#0a0e1c" stroke-width="6" stroke-linecap="round"/>
+    <path d="M84 116 q8 -6 16 0" stroke="#4a5f8f" stroke-width="4" fill="none" opacity="0.9"/>
+    <path d="M142 116 q8 -6 16 0" stroke="#4a5f8f" stroke-width="4" fill="none" opacity="0.9"/>
+  </g>
+  <!-- lässiges Lächeln -->
+  <path d="M104 168 Q128 184 152 166" fill="none" stroke="#101528" stroke-width="8" stroke-linecap="round"/>
+</svg>

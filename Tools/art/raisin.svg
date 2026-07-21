@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <radialGradient id="g" cx="0.38" cy="0.32" r="0.9">
+      <stop offset="0" stop-color="#7b4a8f"/>
+      <stop offset="0.6" stop-color="#5b2d6e"/>
+      <stop offset="1" stop-color="#3d1b4d"/>
+    </radialGradient>
+  </defs>
+  <!-- Ray Sin: die fröhliche Rosine -->
+  <ellipse cx="128" cy="134" rx="88" ry="72" fill="url(#g)" stroke="#2a1136" stroke-width="7" transform="rotate(-12 128 134)"/>
+  <path d="M52 150 q14 16 30 18" fill="none" stroke="#3d1b4d" stroke-width="7" stroke-linecap="round" opacity="0.6"/>
+  <path d="M180 84 q14 10 20 26" fill="none" stroke="#3d1b4d" stroke-width="7" stroke-linecap="round" opacity="0.6"/>
+  <ellipse cx="90" cy="82" rx="24" ry="12" fill="#b98cc9" opacity="0.75" transform="rotate(-20 90 82)"/>
+  <!-- Gesicht -->
+  <g>
+    <ellipse cx="102" cy="122" rx="15" ry="17" fill="#ffffff"/>
+    <ellipse cx="154" cy="122" rx="15" ry="17" fill="#ffffff"/>
+    <circle cx="105" cy="126" r="7.5" fill="#2a1136"/>
+    <circle cx="151" cy="126" r="7.5" fill="#2a1136"/>
+    <circle cx="107.5" cy="123" r="2.5" fill="#ffffff"/>
+    <circle cx="153.5" cy="123" r="2.5" fill="#ffffff"/>
+    <path d="M100 158 Q128 180 156 158" fill="none" stroke="#2a1136" stroke-width="8" stroke-linecap="round"/>
+    <ellipse cx="82" cy="150" rx="11" ry="7" fill="#e08bb0" opacity="0.55"/>
+    <ellipse cx="174" cy="150" rx="11" ry="7" fill="#e08bb0" opacity="0.55"/>
+  </g>
+</svg>
