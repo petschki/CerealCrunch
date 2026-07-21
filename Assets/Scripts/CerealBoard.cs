@@ -60,11 +60,39 @@ public class CerealBoard : MonoBehaviour
         };
     }
 
+    /// Board shape mask per level — rotates through six layouts.
+    /// Inactive cells hold no pieces; falling pieces pass through gaps.
+    static bool[,] BuildShape(int level, int w, int h)
+    {
+        int kind = (level - 1) % 6;
+        var shape = new bool[w, h];
+        float cx = (w - 1) / 2f, cy = (h - 1) / 2f;
+        for (int x = 0; x < w; x++)
+        {
+            for (int y = 0; y < h; y++)
+            {
+                int left = x, right = w - 1 - x, bottom = y, top = h - 1 - y;
+                shape[x, y] = kind switch
+                {
+                    1 => left + bottom >= 2 && right + bottom >= 2 &&
+                         left + top >= 2 && right + top >= 2,                 // rounded corners
+                    2 => Mathf.Abs(x - cx) + Mathf.Abs(y - cy) <= 4.5f,       // diamond
+                    3 => (x >= 2 && x <= w - 3) || (y >= 2 && y <= h - 3),    // plus
+                    4 => !(x >= 3 && x <= w - 4 && y >= 3 && y <= h - 4),     // donut
+                    5 => !(x >= 2 && x <= w - 3 && y >= h - 3),               // U shape
+                    _ => true                                                 // full square
+                };
+            }
+        }
+        return shape;
+    }
+
     enum GameState { Playing, Won, Lost }
 
     Sprite[] cerealSprites;
     Sprite cellSprite;
     CerealPiece[,] grid;
+    bool[,] activeCells;
     LevelConfig cfg;
     GameState state;
     int level;
@@ -76,6 +104,14 @@ public class CerealBoard : MonoBehaviour
 
     CerealPiece dragPiece;
     Vector2 dragStartWorld;
+    GameUI ui;
+    LevelPathScreen pathScreen;
+
+    // Hint: after some idle time, pulse the pieces of one possible move
+    const float HintDelay = 6f;
+    float idleTime;
+    CerealPiece hintA, hintB;
+    Coroutine hintRoutine;
 
     void Start()
     {
@@ -86,7 +122,8 @@ public class CerealBoard : MonoBehaviour
         LoadSprites();
         SetupCamera();
         BuildTableBackground();
-        BuildCellBackground();
+        ui = GameUI.Create();
+        pathScreen = LevelPathScreen.Create();
         LoadLevel(PlayerPrefs.GetInt(LevelPrefsKey, 1));
     }
 
@@ -160,28 +197,35 @@ public class CerealBoard : MonoBehaviour
 
     void BuildCellBackground()
     {
+        // Rebuilt per level because the shape changes
+        var old = transform.Find("CellBackground");
+        if (old != null) Destroy(old.gameObject);
+
         var parent = new GameObject("CellBackground").transform;
         parent.SetParent(transform, false);
 
-        // Dark backdrop panel: separates the board visually from the busy background
         var panelSprite = Resources.Load<Sprite>("Cereals/ui_panel");
-        if (panelSprite != null)
-        {
-            var panel = new GameObject("BoardPanel");
-            panel.transform.SetParent(parent, false);
-            panel.transform.position = new Vector3((Width - 1) / 2f, (Height - 1) / 2f, 0f);
-            var psr = panel.AddComponent<SpriteRenderer>();
-            psr.sprite = panelSprite;
-            psr.drawMode = SpriteDrawMode.Sliced;
-            psr.size = new Vector2(Width + 0.7f, Height + 0.7f);
-            psr.color = new Color(0.24f, 0.13f, 0.05f, 0.6f);
-            psr.sortingOrder = -12;
-        }
-
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
+                if (!activeCells[x, y]) continue;
+
+                // Dark backdrop tile per cell; overlapping tiles form the
+                // shape's silhouette (opaque so overlaps stay uniform)
+                if (panelSprite != null)
+                {
+                    var panelGo = new GameObject($"Panel {x},{y}");
+                    panelGo.transform.SetParent(parent, false);
+                    panelGo.transform.position = new Vector3(x, y, 0f);
+                    var psr = panelGo.AddComponent<SpriteRenderer>();
+                    psr.sprite = panelSprite;
+                    psr.drawMode = SpriteDrawMode.Sliced;
+                    psr.size = new Vector2(1.26f, 1.26f);
+                    psr.color = new Color(0.33f, 0.2f, 0.1f);
+                    psr.sortingOrder = -12;
+                }
+
                 var go = new GameObject($"Cell {x},{y}");
                 go.transform.SetParent(parent, false);
                 go.transform.position = new Vector3(x, y, 0f);
@@ -201,17 +245,32 @@ public class CerealBoard : MonoBehaviour
     {
         level = newLevel;
         cfg = GetLevelConfig(level);
+        activeCells = BuildShape(level, Width, Height);
+
+        // Scale the target with the playable area: shaped boards have fewer
+        // cells than the full 8x8 the balance was calibrated on.
+        int activeCount = 0;
+        foreach (bool cell in activeCells)
+            if (cell) activeCount++;
+        cfg.TargetScore = Mathf.Max(100,
+            Mathf.RoundToInt(cfg.TargetScore * activeCount / 64f / 10f) * 10);
+
         movesLeft = cfg.Moves;
         score = 0;
         state = GameState.Playing;
         dragPiece = null;
         rescueUsed = false;
+        ResetHint();
 
+        BuildCellBackground();
         ClearAllPieces();
         FillInitialBoard();
 
         if (!HasPossibleMove())
             ReshuffleTypesOnly();
+
+        ui.HideOverlays();
+        ui.SetHud(level, score, cfg.TargetScore, movesLeft);
     }
 
     void ClearAllPieces()
@@ -229,6 +288,7 @@ public class CerealBoard : MonoBehaviour
         {
             for (int y = 0; y < Height; y++)
             {
+                if (!activeCells[x, y]) continue;
                 int type = RandomTypeWithoutMatch(x, y);
                 grid[x, y] = SpawnPiece(x, y, type, new Vector3(x, y, 0f));
             }
@@ -241,9 +301,14 @@ public class CerealBoard : MonoBehaviour
     int RandomTypeWithoutMatch(int x, int y)
     {
         var banned = new HashSet<int>();
-        if (x >= 2 && grid[x - 1, y].Type == grid[x - 2, y].Type) banned.Add(grid[x - 1, y].Type);
-        if (y >= 2 && grid[x, y - 1].Type == grid[x, y - 2].Type) banned.Add(grid[x, y - 1].Type);
+        if (x >= 2 && grid[x - 1, y] != null && grid[x - 2, y] != null &&
+            grid[x - 1, y].Type == grid[x - 2, y].Type)
+            banned.Add(grid[x - 1, y].Type);
+        if (y >= 2 && grid[x, y - 1] != null && grid[x, y - 2] != null &&
+            grid[x, y - 1].Type == grid[x, y - 2].Type)
+            banned.Add(grid[x, y - 1].Type);
         if (x >= 1 && y >= 1 &&
+            grid[x - 1, y] != null && grid[x - 1, y - 1] != null && grid[x, y - 1] != null &&
             grid[x - 1, y].Type == grid[x - 1, y - 1].Type &&
             grid[x - 1, y].Type == grid[x, y - 1].Type)
             banned.Add(grid[x - 1, y].Type);
@@ -273,8 +338,13 @@ public class CerealBoard : MonoBehaviour
     {
         if (busy || state != GameState.Playing || AdsManager.IsShowingAd) return;
 
+        idleTime += Time.deltaTime;
+        if (idleTime >= HintDelay && hintRoutine == null)
+            ShowHint();
+
         if (Input.GetMouseButtonDown(0))
         {
+            ResetHint();
             Vector2 world = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             int x = Mathf.RoundToInt(world.x);
             int y = Mathf.RoundToInt(world.y);
@@ -296,7 +366,7 @@ public class CerealBoard : MonoBehaviour
 
                 int tx = dragPiece.X + dx;
                 int ty = dragPiece.Y + dy;
-                if (tx >= 0 && tx < Width && ty >= 0 && ty < Height)
+                if (tx >= 0 && tx < Width && ty >= 0 && ty < Height && grid[tx, ty] != null)
                     StartCoroutine(SwapRoutine(dragPiece, grid[tx, ty]));
                 dragPiece = null;
             }
@@ -322,6 +392,7 @@ public class CerealBoard : MonoBehaviour
         if (FindMatches().Count > 0)
         {
             movesLeft--;
+            ui.SetHud(level, score, cfg.TargetScore, movesLeft);
             yield return ResolveBoard();
             EvaluateLevelEnd();
         }
@@ -348,10 +419,29 @@ public class CerealBoard : MonoBehaviour
             state = GameState.Won;
             PlayerPrefs.SetInt(LevelPrefsKey, level + 1);
             PlayerPrefs.Save();
+            ui.ShowWin(level + 1, () =>
+                AdsManager.Instance.MaybeShowInterstitial(level, () =>
+                {
+                    // Path screen with Cerealia's hop, then the next level
+                    ui.HideOverlays();
+                    pathScreen.Show(level, level + 1, () => LoadLevel(level + 1));
+                }));
         }
         else if (movesLeft <= 0)
         {
             state = GameState.Lost;
+            ui.ShowLose(
+                !rescueUsed && AdsManager.Instance.RewardedAvailable,
+                () => AdsManager.Instance.ShowRewarded(earned =>
+                {
+                    if (!earned) return;
+                    rescueUsed = true;
+                    movesLeft += 5;
+                    state = GameState.Playing;
+                    ui.HideOverlays();
+                    ui.SetHud(level, score, cfg.TargetScore, movesLeft);
+                }),
+                () => LoadLevel(level));
         }
     }
 
@@ -373,6 +463,7 @@ public class CerealBoard : MonoBehaviour
 
             lastCascade++;
             score += matches.Count * 10 * lastCascade;
+            ui.SetHud(level, score, cfg.TargetScore, movesLeft);
             ShowCharacterCallout(matches);
 
             foreach (var piece in matches)
@@ -530,28 +621,42 @@ public class CerealBoard : MonoBehaviour
     {
         for (int x = 0; x < Width; x++)
         {
-            int writeY = 0;
+            // Active slots of this column, bottom to top. Pieces fall straight
+            // down and pass through inactive gaps in the shape.
+            var slots = new List<int>();
             for (int y = 0; y < Height; y++)
+                if (activeCells[x, y]) slots.Add(y);
+
+            var falling = new List<CerealPiece>();
+            foreach (int y in slots)
             {
-                if (grid[x, y] == null) continue;
-                if (y != writeY)
-                {
-                    var piece = grid[x, y];
-                    grid[x, writeY] = piece;
-                    grid[x, y] = null;
-                    piece.SetGridPosition(x, writeY);
-                    piece.MoveTo(new Vector3(x, writeY, 0f), FallDurationPerCell * (y - writeY) + 0.05f);
-                }
-                writeY++;
+                if (grid[x, y] != null) falling.Add(grid[x, y]);
+                grid[x, y] = null;
             }
-            int spawnOffset = 1;
-            for (int y = writeY; y < Height; y++)
+
+            for (int i = 0; i < slots.Count; i++)
             {
-                int type = Random.Range(0, cfg.TypeCount);
-                var piece = SpawnPiece(x, y, type, new Vector3(x, Height + spawnOffset - 1, 0f));
-                grid[x, y] = piece;
-                piece.MoveTo(new Vector3(x, y, 0f), FallDurationPerCell * (Height + spawnOffset - 1 - y) + 0.05f);
-                spawnOffset++;
+                int targetY = slots[i];
+                if (i < falling.Count)
+                {
+                    var piece = falling[i];
+                    grid[x, targetY] = piece;
+                    if (piece.Y != targetY)
+                    {
+                        float distance = piece.Y - targetY;
+                        piece.SetGridPosition(x, targetY);
+                        piece.MoveTo(new Vector3(x, targetY, 0f), FallDurationPerCell * distance + 0.05f);
+                    }
+                }
+                else
+                {
+                    // Spawn new pieces stacked above the board
+                    int spawnRow = Height + (i - falling.Count);
+                    int type = Random.Range(0, cfg.TypeCount);
+                    var piece = SpawnPiece(x, targetY, type, new Vector3(x, spawnRow, 0f));
+                    grid[x, targetY] = piece;
+                    piece.MoveTo(new Vector3(x, targetY, 0f), FallDurationPerCell * (spawnRow - targetY) + 0.05f);
+                }
             }
         }
         yield return WaitForPieces();
@@ -569,6 +674,58 @@ public class CerealBoard : MonoBehaviour
         }
     }
 
+    // ---------- Hint ----------
+
+    /// Picks a random valid move and pulses both pieces until the player acts.
+    void ShowHint()
+    {
+        var candidates = new List<(CerealPiece a, CerealPiece b)>();
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                if (grid[x, y] == null) continue;
+                if (x < Width - 1 && grid[x + 1, y] != null && SwapCreatesMatch(x, y, x + 1, y))
+                    candidates.Add((grid[x, y], grid[x + 1, y]));
+                if (y < Height - 1 && grid[x, y + 1] != null && SwapCreatesMatch(x, y, x, y + 1))
+                    candidates.Add((grid[x, y], grid[x, y + 1]));
+            }
+        }
+        if (candidates.Count == 0) return;
+
+        var pick = candidates[Random.Range(0, candidates.Count)];
+        hintA = pick.a;
+        hintB = pick.b;
+        hintRoutine = StartCoroutine(HintPulseRoutine());
+    }
+
+    IEnumerator HintPulseRoutine()
+    {
+        float t = 0f;
+        while (true)
+        {
+            t += Time.deltaTime;
+            float pulse = PieceScale * (1f + 0.12f * Mathf.Abs(Mathf.Sin(t * 4f)));
+            if (hintA != null && !hintA.Moving) hintA.transform.localScale = Vector3.one * pulse;
+            if (hintB != null && !hintB.Moving) hintB.transform.localScale = Vector3.one * pulse;
+            yield return null;
+        }
+    }
+
+    void ResetHint()
+    {
+        idleTime = 0f;
+        if (hintRoutine != null)
+        {
+            StopCoroutine(hintRoutine);
+            hintRoutine = null;
+        }
+        if (hintA != null) hintA.transform.localScale = Vector3.one * PieceScale;
+        if (hintB != null) hintB.transform.localScale = Vector3.one * PieceScale;
+        hintA = null;
+        hintB = null;
+    }
+
     // ---------- Deadlock handling ----------
 
     bool HasPossibleMove()
@@ -577,8 +734,9 @@ public class CerealBoard : MonoBehaviour
         {
             for (int y = 0; y < Height; y++)
             {
-                if (x < Width - 1 && SwapCreatesMatch(x, y, x + 1, y)) return true;
-                if (y < Height - 1 && SwapCreatesMatch(x, y, x, y + 1)) return true;
+                if (grid[x, y] == null) continue;
+                if (x < Width - 1 && grid[x + 1, y] != null && SwapCreatesMatch(x, y, x + 1, y)) return true;
+                if (y < Height - 1 && grid[x, y + 1] != null && SwapCreatesMatch(x, y, x, y + 1)) return true;
             }
         }
         return false;
@@ -601,13 +759,13 @@ public class CerealBoard : MonoBehaviour
         int type = grid[x, y].Type;
 
         int run = 1;
-        for (int i = x - 1; i >= 0 && grid[i, y].Type == type; i--) run++;
-        for (int i = x + 1; i < Width && grid[i, y].Type == type; i++) run++;
+        for (int i = x - 1; i >= 0 && grid[i, y] != null && grid[i, y].Type == type; i--) run++;
+        for (int i = x + 1; i < Width && grid[i, y] != null && grid[i, y].Type == type; i++) run++;
         if (run >= 3) return true;
 
         run = 1;
-        for (int i = y - 1; i >= 0 && grid[x, i].Type == type; i--) run++;
-        for (int i = y + 1; i < Height && grid[x, i].Type == type; i++) run++;
+        for (int i = y - 1; i >= 0 && grid[x, i] != null && grid[x, i].Type == type; i--) run++;
+        for (int i = y + 1; i < Height && grid[x, i] != null && grid[x, i].Type == type; i++) run++;
         if (run >= 3) return true;
 
         // 2x2 squares: check all four blocks that could contain (x,y)
@@ -617,10 +775,10 @@ public class CerealBoard : MonoBehaviour
             {
                 int x0 = x + dx, y0 = y + dy;
                 if (x0 < 0 || y0 < 0 || x0 + 1 >= Width || y0 + 1 >= Height) continue;
-                if (grid[x0, y0].Type == type &&
-                    grid[x0 + 1, y0].Type == type &&
-                    grid[x0, y0 + 1].Type == type &&
-                    grid[x0 + 1, y0 + 1].Type == type)
+                if (grid[x0, y0] != null && grid[x0, y0].Type == type &&
+                    grid[x0 + 1, y0] != null && grid[x0 + 1, y0].Type == type &&
+                    grid[x0, y0 + 1] != null && grid[x0, y0 + 1].Type == type &&
+                    grid[x0 + 1, y0 + 1] != null && grid[x0 + 1, y0 + 1].Type == type)
                     return true;
             }
         }
@@ -633,89 +791,23 @@ public class CerealBoard : MonoBehaviour
         {
             for (int x = 0; x < Width; x++)
                 for (int y = 0; y < Height; y++)
-                    grid[x, y].Type = RandomTypeWithoutMatch(x, y);
+                    if (grid[x, y] != null)
+                        grid[x, y].Type = RandomTypeWithoutMatch(x, y);
         }
         while (!HasPossibleMove());
 
         foreach (var piece in grid)
-            piece.Renderer.sprite = cerealSprites[piece.Type];
+            if (piece != null)
+                piece.Renderer.sprite = cerealSprites[piece.Type];
     }
 
     IEnumerator ReshuffleRoutine()
     {
         ReshuffleTypesOnly();
         foreach (var piece in grid)
-            StartCoroutine(piece.ShakeRoutine());
+            if (piece != null)
+                StartCoroutine(piece.ShakeRoutine());
         yield return new WaitForSeconds(0.3f);
     }
 
-    // ---------- UI ----------
-
-    void OnGUI()
-    {
-        if (AdsManager.IsShowingAd) return; // the ad provider is drawing its own UI
-
-        var title = new GUIStyle(GUI.skin.label)
-        {
-            fontSize = Mathf.RoundToInt(Screen.height * 0.04f),
-            fontStyle = FontStyle.Bold,
-            alignment = TextAnchor.MiddleCenter
-        };
-        var info = new GUIStyle(title)
-        {
-            fontSize = Mathf.RoundToInt(Screen.height * 0.028f)
-        };
-
-        GameGui.ShadowLabel(new Rect(0, Screen.height * 0.01f, Screen.width, Screen.height * 0.05f),
-            $"CEREAL CRUNCH — Level {level}", title, Color.white);
-        GameGui.ShadowLabel(new Rect(0, Screen.height * 0.055f, Screen.width, Screen.height * 0.04f),
-            $"Score: {score} / {cfg.TargetScore}     Züge: {movesLeft}", info, new Color(1f, 0.93f, 0.78f));
-
-        if (state == GameState.Playing) return;
-
-        // Dim the screen + win/lose overlay
-        var oldColor = GUI.color;
-        GUI.color = new Color(0f, 0f, 0f, 0.6f);
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Texture2D.whiteTexture);
-        GUI.color = oldColor;
-
-        var big = new GUIStyle(title) { fontSize = Mathf.RoundToInt(Screen.height * 0.06f) };
-
-        float cx = Screen.width / 2f;
-        float cy = Screen.height / 2f;
-
-        if (state == GameState.Won)
-        {
-            GameGui.ShadowLabel(new Rect(0, cy - Screen.height * 0.15f, Screen.width, Screen.height * 0.1f),
-                "Level geschafft!", big, Color.white);
-            if (GUI.Button(new Rect(cx - 160, cy, 320, Screen.height * 0.075f), $"Weiter zu Level {level + 1}", GameGui.Button))
-                AdsManager.Instance.MaybeShowInterstitial(level, () => LoadLevel(level + 1));
-        }
-        else
-        {
-            GameGui.ShadowLabel(new Rect(0, cy - Screen.height * 0.15f, Screen.width, Screen.height * 0.1f),
-                "Keine Züge mehr!", big, Color.white);
-
-            float buttonY = cy;
-            if (!rescueUsed && AdsManager.Instance.RewardedAvailable)
-            {
-                if (GUI.Button(new Rect(cx - 160, buttonY, 320, Screen.height * 0.075f),
-                        "+5 Züge — Werbung ansehen", GameGui.Button))
-                {
-                    AdsManager.Instance.ShowRewarded(earned =>
-                    {
-                        if (earned)
-                        {
-                            rescueUsed = true;
-                            movesLeft += 5;
-                            state = GameState.Playing;
-                        }
-                    });
-                }
-                buttonY += Screen.height * 0.095f;
-            }
-            if (GUI.Button(new Rect(cx - 160, buttonY, 320, Screen.height * 0.075f), "Nochmal versuchen", GameGui.Button))
-                LoadLevel(level);
-        }
-    }
 }

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Level node: small plate; near-white so runtime tinting works -->
+  <circle cx="128" cy="128" r="116" fill="#fdfaf0" stroke="#b89358" stroke-width="10"/>
+  <circle cx="128" cy="128" r="84" fill="none" stroke="#e6d6b4" stroke-width="8"/>
+</svg>

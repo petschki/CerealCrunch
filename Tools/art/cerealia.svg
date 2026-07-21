@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Cerealia: chibi version of the banner artwork — auburn wavy hair,
+       blue headband bow, wink, striped tee, apron, denim shorts, cereal bowl -->
+
+  <!-- back hair -->
+  <path d="M128 26 C 76 26 52 62 54 104 C 40 150 52 186 72 196 C 60 150 66 132 74 112
+           C 92 128 170 128 182 112 C 190 132 196 150 184 196 C 204 186 216 150 202 104
+           C 204 62 180 26 128 26 Z"
+        fill="#a8562e" stroke="#232b38" stroke-width="8"/>
+
+  <!-- legs and shoes -->
+  <rect x="106" y="218" width="16" height="24" fill="#f8cfa6" stroke="#232b38" stroke-width="6"/>
+  <rect x="134" y="218" width="16" height="24" fill="#f8cfa6" stroke="#232b38" stroke-width="6"/>
+  <ellipse cx="112" cy="245" rx="17" ry="9" fill="#d97f4a" stroke="#232b38" stroke-width="6"/>
+  <ellipse cx="144" cy="245" rx="17" ry="9" fill="#d97f4a" stroke="#232b38" stroke-width="6"/>
+
+  <!-- denim shorts -->
+  <path d="M100 196 L 156 196 L 158 222 L 130 222 L 128 210 L 126 222 L 98 222 Z"
+        fill="#4a72b0" stroke="#232b38" stroke-width="7"/>
+
+  <!-- torso: striped tee -->
+  <path d="M100 148 L 156 148 L 160 200 L 96 200 Z" fill="#5cb85c" stroke="none"/>
+  <path d="M98 162 L 158 162 L 159 176 L 97 176 Z" fill="#f2c94c"/>
+  <path d="M97 176 L 159 176 L 160 190 L 96 190 Z" fill="#4aa8d8"/>
+  <path d="M100 148 L 156 148 L 160 200 L 96 200 Z" fill="none" stroke="#232b38" stroke-width="7"/>
+
+  <!-- apron -->
+  <path d="M104 178 L 152 178 L 156 208 L 100 208 Z" fill="#fdfaf0" stroke="#232b38" stroke-width="6"/>
+  <circle cx="118" cy="192" r="4" fill="#e2544a"/>
+  <circle cx="138" cy="190" r="4" fill="#f0b429"/>
+  <circle cx="128" cy="200" r="4" fill="#5cb85c"/>
+
+  <!-- right arm raised with spoon -->
+  <path d="M154 158 Q 186 150 198 128" fill="none" stroke="#232b38" stroke-width="20" stroke-linecap="round"/>
+  <path d="M154 158 Q 186 150 198 128" fill="none" stroke="#f8cfa6" stroke-width="12" stroke-linecap="round"/>
+  <g transform="rotate(-30 206 112)">
+    <rect x="202" y="88" width="8" height="40" rx="4" fill="#d4dade" stroke="#232b38" stroke-width="5"/>
+    <ellipse cx="206" cy="82" rx="12" ry="15" fill="#e4eaee" stroke="#232b38" stroke-width="5"/>
+  </g>
+
+  <!-- left arm to bowl -->
+  <path d="M102 160 Q 74 172 62 186" fill="none" stroke="#232b38" stroke-width="20" stroke-linecap="round"/>
+  <path d="M102 160 Q 74 172 62 186" fill="none" stroke="#f8cfa6" stroke-width="12" stroke-linecap="round"/>
+  <!-- cereal bowl -->
+  <g>
+    <g fill="#e8b04c" stroke="#232b38" stroke-width="5">
+      <circle cx="48" cy="178" r="10"/><circle cx="66" cy="172" r="10"/><circle cx="58" cy="186" r="10" fill="#c98a3c"/>
+    </g>
+    <circle cx="54" cy="168" r="8" fill="#3d5cae" stroke="#232b38" stroke-width="5"/>
+    <circle cx="68" cy="184" r="8" fill="#e2544a" stroke="#232b38" stroke-width="5"/>
+    <path d="M28 186 Q 32 216 58 216 Q 84 216 88 186 Q 58 196 28 186 Z"
+          fill="#f0e2c8" stroke="#232b38" stroke-width="7"/>
+  </g>
+
+  <!-- face -->
+  <ellipse cx="128" cy="100" rx="52" ry="48" fill="#f8cfa6" stroke="#232b38" stroke-width="8"/>
+  <!-- fringe -->
+  <path d="M76 92 Q 80 54 112 46 Q 100 62 104 74 Q 118 50 150 50 Q 142 62 146 72 Q 158 56 180 70 Q 180 84 180 92
+           Q 168 66 128 66 Q 88 66 76 92 Z"
+        fill="#a8562e" stroke="#232b38" stroke-width="7" stroke-linejoin="round"/>
+  <!-- headband + bow -->
+  <path d="M78 62 Q 128 34 178 62" fill="none" stroke="#4aa8d8" stroke-width="14"/>
+  <g transform="translate(92 44) rotate(-18)">
+    <path d="M0 0 L -26 -14 Q -32 0 -26 14 Z" fill="#4aa8d8" stroke="#232b38" stroke-width="5"/>
+    <path d="M0 0 L 26 -14 Q 32 0 26 14 Z" fill="#4aa8d8" stroke="#232b38" stroke-width="5"/>
+    <circle cx="0" cy="0" r="8" fill="#77c4e8" stroke="#232b38" stroke-width="5"/>
+  </g>
+  <!-- eyes: left winking, right open -->
+  <path d="M96 100 q 12 10 24 0" fill="none" stroke="#232b38" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="152" cy="98" rx="13" ry="15" fill="#ffffff" stroke="#232b38" stroke-width="5"/>
+  <circle cx="154" cy="101" r="7" fill="#7a4a1e"/>
+  <circle cx="156.5" cy="98" r="2.4" fill="#ffffff"/>
+  <!-- eyebrows -->
+  <path d="M92 84 q 14 -8 28 -4" fill="none" stroke="#8a4423" stroke-width="6" stroke-linecap="round"/>
+  <path d="M138 80 q 14 -6 26 2" fill="none" stroke="#8a4423" stroke-width="6" stroke-linecap="round"/>
+  <!-- open laughing mouth -->
+  <path d="M108 118 Q 128 124 148 116 Q 146 142 126 142 Q 110 140 108 118 Z"
+        fill="#7a2a2a" stroke="#232b38" stroke-width="6"/>
+  <path d="M112 119 Q 128 124 144 118 L 143 124 Q 128 129 113 125 Z" fill="#ffffff"/>
+  <path d="M118 136 Q 128 142 138 135 Q 133 140 126 140 Q 121 139 118 136 Z" fill="#e88a9a"/>
+  <!-- blush + freckles -->
+  <ellipse cx="92" cy="114" rx="10" ry="6" fill="#f0a08a" opacity="0.7"/>
+  <ellipse cx="164" cy="112" rx="10" ry="6" fill="#f0a08a" opacity="0.7"/>
+  <circle cx="104" cy="112" r="1.8" fill="#c97a4e"/>
+  <circle cx="112" cy="115" r="1.8" fill="#c97a4e"/>
+  <circle cx="148" cy="113" r="1.8" fill="#c97a4e"/>
+  <circle cx="156" cy="116" r="1.8" fill="#c97a4e"/>
+
+  <!-- earring -->
+  <circle cx="76" cy="112" r="5" fill="#f2c94c" stroke="#232b38" stroke-width="4"/>
+</svg>

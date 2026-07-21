@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 2048">
+  <!-- Board-game style progress map. Node positions MUST match the
+       NodeAnchors table in LevelPathScreen.cs (normalized, y from bottom):
+       1 (0.24 0.126)  2 (0.42 0.126)  3 (0.60 0.126)  4 (0.78 0.219)
+       5 (0.70 0.375)  6 (0.48 0.375)  7 (0.26 0.448)  8 (0.38 0.585) -->
+  <defs>
+    <g id="arrow">
+      <path d="M-16 -13 L18 0 L-16 13 Z" fill="#5cb85c" stroke="#2e7d32" stroke-width="5"/>
+    </g>
+    <g id="balloon">
+      <ellipse rx="26" ry="32" stroke="#232b38" stroke-width="5"/>
+      <path d="M0 32 q 6 20 -4 44" fill="none" stroke="#232b38" stroke-width="4"/>
+    </g>
+    <g id="plant">
+      <path d="M0 0 q -6 -40 8 -62 M6 0 q 12 -34 34 -46 M-4 0 q -26 -20 -34 -46 M2 0 q 2 -50 -12 -66"
+            fill="none" stroke="#4da44e" stroke-width="10" stroke-linecap="round"/>
+      <path d="M-28 0 L 28 0 L 20 44 L -20 44 Z" fill="#d97f4a" stroke="#232b38" stroke-width="7"/>
+    </g>
+    <g id="sparkle">
+      <path d="M0 -20 L4 -4 L20 0 L4 4 L0 20 L-4 4 L-20 0 L-4 -4 Z" fill="#ffffff"/>
+    </g>
+  </defs>
+
+  <!-- Room: wall with windows, green floor -->
+  <rect x="0" y="0" width="1024" height="380" fill="#f5e8cc"/>
+  <rect x="60" y="60" width="240" height="240" rx="10" fill="#bfe0ee" stroke="#232b38" stroke-width="9"/>
+  <path d="M92 270 L 190 100 M140 284 L 250 92" stroke="#eaf6fc" stroke-width="14" stroke-linecap="round"/>
+  <rect x="724" y="60" width="240" height="240" rx="10" fill="#bfe0ee" stroke="#232b38" stroke-width="9"/>
+  <path d="M756 270 L 854 100 M804 284 L 914 92" stroke="#eaf6fc" stroke-width="14" stroke-linecap="round"/>
+  <rect x="0" y="368" width="1024" height="12" fill="#d9c49a"/>
+  <rect x="0" y="380" width="1024" height="1668" fill="#b8dcb0"/>
+  <g fill="#a3cf9a">
+    <ellipse cx="150" cy="560" rx="60" ry="16"/><ellipse cx="880" cy="700" rx="70" ry="18"/>
+    <ellipse cx="120" cy="1560" rx="70" ry="18"/><ellipse cx="920" cy="1180" rx="60" ry="16"/>
+    <ellipse cx="820" cy="1900" rx="70" ry="18"/>
+  </g>
+
+  <!-- Serpentine walkway: wood edge underneath, pale band on top -->
+  <path d="M 160 1790 L 620 1790 Q 800 1790 798 1620 L 798 1450 Q 798 1280 717 1280 L 492 1280 Q 266 1280 266 1140
+           Q 266 910 389 860 Q 500 815 640 780"
+        fill="none" stroke="#8a5a33" stroke-width="188" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 160 1790 L 620 1790 Q 800 1790 798 1620 L 798 1450 Q 798 1280 717 1280 L 492 1280 Q 266 1280 266 1140
+           Q 266 910 389 860 Q 500 815 640 780"
+        fill="none" stroke="#f4e6c4" stroke-width="150" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- crumbs on the band -->
+  <g fill="#d9b878">
+    <circle cx="330" cy="1758" r="7"/><circle cx="520" cy="1820" r="7"/><circle cx="770" cy="1520" r="7"/>
+    <circle cx="600" cy="1252" r="7"/><circle cx="300" cy="1210" r="7"/><circle cx="330" cy="900" r="7"/>
+    <circle cx="540" cy="826" r="7"/>
+  </g>
+
+  <!-- direction arrows between nodes -->
+  <use href="#arrow" transform="translate(338 1790)"/>
+  <use href="#arrow" transform="translate(522 1790)"/>
+  <use href="#arrow" transform="translate(798 1500) rotate(-90)"/>
+  <use href="#arrow" transform="translate(604 1280) rotate(180)"/>
+  <use href="#arrow" transform="translate(380 1280) rotate(180)"/>
+  <use href="#arrow" transform="translate(272 1010) rotate(-80)"/>
+  <use href="#arrow" transform="translate(520 818) rotate(-14)"/>
+
+  <!-- Start arch (bottom left) -->
+  <g>
+    <g stroke="#232b38" stroke-width="8">
+      <rect x="76" y="1830" width="44" height="190" fill="#e0574f"/>
+      <rect x="240" y="1830" width="44" height="190" fill="#e0574f"/>
+    </g>
+    <g fill="#ffffff" opacity="0.85">
+      <rect x="80" y="1856" width="36" height="26"/><rect x="80" y="1912" width="36" height="26"/><rect x="80" y="1968" width="36" height="26"/>
+      <rect x="244" y="1856" width="36" height="26"/><rect x="244" y="1912" width="36" height="26"/><rect x="244" y="1968" width="36" height="26"/>
+    </g>
+    <path d="M 60 1850 Q 180 1740 300 1850 L 300 1800 Q 180 1690 60 1800 Z"
+          fill="#c9342b" stroke="#232b38" stroke-width="8"/>
+    <text x="180" y="1806" font-family="Helvetica, DejaVu Sans, sans-serif" font-size="42" font-weight="bold"
+          fill="#ffffff" text-anchor="middle">START!</text>
+    <path d="M 0 1860 l 12 24 26 4 -19 18 5 26 -24 -13 -24 13 5 -26 -19 -18 26 -4 Z"
+          fill="#f5c542" stroke="#232b38" stroke-width="6" transform="translate(180 60)"/>
+  </g>
+
+  <!-- Station: Flocken-Bar (dispensers on a tray, mid run) -->
+  <g>
+    <rect x="470" y="1080" width="330" height="26" rx="12" fill="#c9ced4" stroke="#232b38" stroke-width="7"/>
+    <g>
+      <rect x="500" y="960" width="70" height="120" rx="12" fill="#e8eef2" stroke="#232b38" stroke-width="7"/>
+      <rect x="492" y="944" width="86" height="24" rx="10" fill="#aab8c0" stroke="#232b38" stroke-width="6"/>
+      <g fill="#e8873c"><circle cx="520" cy="1000" r="9"/><circle cx="548" cy="1014" r="9"/><circle cx="526" cy="1040" r="9"/><circle cx="552" cy="1058" r="9"/></g>
+    </g>
+    <g>
+      <rect x="600" y="960" width="70" height="120" rx="12" fill="#e8eef2" stroke="#232b38" stroke-width="7"/>
+      <rect x="592" y="944" width="86" height="24" rx="10" fill="#aab8c0" stroke="#232b38" stroke-width="6"/>
+      <g><circle cx="620" cy="1000" r="9" fill="#e26a8d"/><circle cx="648" cy="1014" r="9" fill="#7890d0"/><circle cx="626" cy="1040" r="9" fill="#f2c94c"/><circle cx="652" cy="1058" r="9" fill="#5cb85c"/></g>
+    </g>
+    <path d="M 706 1080 L 700 1010 L 716 984 L 758 984 L 764 1010 L 758 1080 Z" fill="#fdfeff" stroke="#232b38" stroke-width="7"/>
+    <path d="M 704 1022 Q 732 1034 762 1024 L 764 1044 Q 732 1054 702 1044 Z" fill="#cfe8f4"/>
+    <rect x="430" y="1296" width="260" height="52" rx="16" fill="#8a5a33" stroke="#232b38" stroke-width="7"/>
+    <text x="560" y="1332" font-family="Helvetica, DejaVu Sans, sans-serif" font-size="30" font-weight="bold"
+          fill="#ffffff" text-anchor="middle">FLOCKEN-BAR</text>
+  </g>
+
+  <!-- Station: croissant plate near top run -->
+  <g>
+    <ellipse cx="150" cy="820" rx="95" ry="26" fill="#f4f8fb" stroke="#232b38" stroke-width="8"/>
+    <path d="M 96 800 Q 118 774 150 774 Q 138 786 136 800 Q 150 792 166 796 Q 152 804 150 814 Q 170 810 186 818 Q 150 830 112 818 Z"
+          fill="#e8a83c" stroke="#232b38" stroke-width="6"/>
+    <path d="M 170 786 q 20 -8 34 6" fill="none" stroke="#e8a83c" stroke-width="14" stroke-linecap="round"/>
+  </g>
+
+  <!-- Goal podium with pancakes and balloons (top) -->
+  <g>
+    <path d="M 560 730 L 900 730 L 880 640 L 580 640 Z" fill="#a86a3c" stroke="#232b38" stroke-width="8"/>
+    <ellipse cx="730" cy="640" rx="152" ry="34" fill="#f4e6c4" stroke="#232b38" stroke-width="8"/>
+    <g stroke="#232b38" stroke-width="6">
+      <ellipse cx="730" cy="600" rx="64" ry="18" fill="#e8a84c"/>
+      <ellipse cx="730" cy="584" rx="58" ry="16" fill="#d9924c"/>
+      <ellipse cx="730" cy="568" rx="52" ry="15" fill="#e8a84c"/>
+      <rect x="716" y="548" width="28" height="14" rx="4" fill="#f5e29b"/>
+    </g>
+    <path d="M 700 596 q 30 14 60 0 l -4 16 q -26 10 -52 0 Z" fill="#b0682c"/>
+    <use href="#balloon" transform="translate(560 520)" fill="#e26a8d"/>
+    <use href="#balloon" transform="translate(608 484)" fill="#7ec8e8"/>
+    <use href="#balloon" transform="translate(886 500)" fill="#f2c94c"/>
+    <use href="#balloon" transform="translate(852 468)" fill="#5cb85c"/>
+    <rect x="580" y="404" width="300" height="70" rx="20" fill="#c9342b" stroke="#232b38" stroke-width="8"/>
+    <text x="730" y="452" font-family="Helvetica, DejaVu Sans, sans-serif" font-size="46" font-weight="bold"
+          fill="#ffffff" text-anchor="middle">ZIEL!</text>
+  </g>
+
+  <!-- plants and sparkles -->
+  <use href="#plant" transform="translate(70 620)"/>
+  <use href="#plant" transform="translate(940 1140) scale(0.85)"/>
+  <use href="#plant" transform="translate(930 1940)"/>
+  <use href="#sparkle" x="420" y="500"/>
+  <use href="#sparkle" x="900" y="880" transform="scale(0.8)"/>
+  <use href="#sparkle" x="80" y="1350"/>
+</svg>

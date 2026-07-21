@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 
 /// Automatically configures all PNGs in the Cereals folder as sprites.
 public class CerealAssetPostprocessor : AssetPostprocessor
@@ -17,6 +18,6 @@ public class CerealAssetPostprocessor : AssetPostprocessor
         if (assetPath.Contains("ui_"))
             importer.spriteBorder = new Vector4(48f, 48f, 48f, 48f);
         importer.alphaIsTransparency = true;
-        importer.filterMode = UnityEngine.FilterMode.Bilinear;
+        importer.filterMode = FilterMode.Bilinear;
     }
 }
