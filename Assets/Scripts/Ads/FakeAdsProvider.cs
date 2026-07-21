@@ -93,11 +93,7 @@ public class FakeAdsProvider : MonoBehaviour, IAdsProvider
         var small = new GUIStyle(big) { fontSize = Mathf.RoundToInt(Screen.height * 0.03f) };
         small.normal.textColor = new Color(0.75f, 0.78f, 0.88f);
 
-        var button = new GUIStyle(GUI.skin.button)
-        {
-            fontSize = Mathf.RoundToInt(Screen.height * 0.03f),
-            fontStyle = FontStyle.Bold
-        };
+        var button = GameGui.Button;
 
         float cx = Screen.width / 2f;
         float cy = Screen.height / 2f;

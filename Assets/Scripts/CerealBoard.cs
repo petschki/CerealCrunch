@@ -162,6 +162,22 @@ public class CerealBoard : MonoBehaviour
     {
         var parent = new GameObject("CellBackground").transform;
         parent.SetParent(transform, false);
+
+        // Dark backdrop panel: separates the board visually from the busy background
+        var panelSprite = Resources.Load<Sprite>("Cereals/ui_panel");
+        if (panelSprite != null)
+        {
+            var panel = new GameObject("BoardPanel");
+            panel.transform.SetParent(parent, false);
+            panel.transform.position = new Vector3((Width - 1) / 2f, (Height - 1) / 2f, 0f);
+            var psr = panel.AddComponent<SpriteRenderer>();
+            psr.sprite = panelSprite;
+            psr.drawMode = SpriteDrawMode.Sliced;
+            psr.size = new Vector2(Width + 0.7f, Height + 0.7f);
+            psr.color = new Color(0.24f, 0.13f, 0.05f, 0.6f);
+            psr.sortingOrder = -12;
+        }
+
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -173,8 +189,8 @@ public class CerealBoard : MonoBehaviour
                 sr.sprite = cellSprite;
                 sr.sortingOrder = -10;
                 sr.color = (x + y) % 2 == 0
-                    ? new Color(1f, 1f, 1f, 0.72f)
-                    : new Color(1f, 0.95f, 0.82f, 0.72f);
+                    ? new Color(1f, 1f, 1f, 0.95f)
+                    : new Color(1f, 0.96f, 0.86f, 0.95f);
             }
         }
     }
@@ -645,18 +661,15 @@ public class CerealBoard : MonoBehaviour
             fontStyle = FontStyle.Bold,
             alignment = TextAnchor.MiddleCenter
         };
-        title.normal.textColor = new Color(0.42f, 0.26f, 0.13f);
-
         var info = new GUIStyle(title)
         {
             fontSize = Mathf.RoundToInt(Screen.height * 0.028f)
         };
-        info.normal.textColor = new Color(0.55f, 0.35f, 0.16f);
 
-        GUI.Label(new Rect(0, Screen.height * 0.01f, Screen.width, Screen.height * 0.05f),
-            $"CEREAL CRUNCH — Level {level}", title);
-        GUI.Label(new Rect(0, Screen.height * 0.055f, Screen.width, Screen.height * 0.04f),
-            $"Score: {score} / {cfg.TargetScore}     Züge: {movesLeft}", info);
+        GameGui.ShadowLabel(new Rect(0, Screen.height * 0.01f, Screen.width, Screen.height * 0.05f),
+            $"CEREAL CRUNCH — Level {level}", title, Color.white);
+        GameGui.ShadowLabel(new Rect(0, Screen.height * 0.055f, Screen.width, Screen.height * 0.04f),
+            $"Score: {score} / {cfg.TargetScore}     Züge: {movesLeft}", info, new Color(1f, 0.93f, 0.78f));
 
         if (state == GameState.Playing) return;
 
@@ -667,34 +680,27 @@ public class CerealBoard : MonoBehaviour
         GUI.color = oldColor;
 
         var big = new GUIStyle(title) { fontSize = Mathf.RoundToInt(Screen.height * 0.06f) };
-        big.normal.textColor = Color.white;
-
-        var button = new GUIStyle(GUI.skin.button)
-        {
-            fontSize = Mathf.RoundToInt(Screen.height * 0.032f),
-            fontStyle = FontStyle.Bold
-        };
 
         float cx = Screen.width / 2f;
         float cy = Screen.height / 2f;
 
         if (state == GameState.Won)
         {
-            GUI.Label(new Rect(0, cy - Screen.height * 0.15f, Screen.width, Screen.height * 0.1f),
-                "Level geschafft!", big);
-            if (GUI.Button(new Rect(cx - 160, cy, 320, Screen.height * 0.07f), $"Weiter zu Level {level + 1}", button))
+            GameGui.ShadowLabel(new Rect(0, cy - Screen.height * 0.15f, Screen.width, Screen.height * 0.1f),
+                "Level geschafft!", big, Color.white);
+            if (GUI.Button(new Rect(cx - 160, cy, 320, Screen.height * 0.075f), $"Weiter zu Level {level + 1}", GameGui.Button))
                 AdsManager.Instance.MaybeShowInterstitial(level, () => LoadLevel(level + 1));
         }
         else
         {
-            GUI.Label(new Rect(0, cy - Screen.height * 0.15f, Screen.width, Screen.height * 0.1f),
-                "Keine Züge mehr!", big);
+            GameGui.ShadowLabel(new Rect(0, cy - Screen.height * 0.15f, Screen.width, Screen.height * 0.1f),
+                "Keine Züge mehr!", big, Color.white);
 
             float buttonY = cy;
             if (!rescueUsed && AdsManager.Instance.RewardedAvailable)
             {
-                if (GUI.Button(new Rect(cx - 160, buttonY, 320, Screen.height * 0.07f),
-                        "+5 Züge — Werbung ansehen", button))
+                if (GUI.Button(new Rect(cx - 160, buttonY, 320, Screen.height * 0.075f),
+                        "+5 Züge — Werbung ansehen", GameGui.Button))
                 {
                     AdsManager.Instance.ShowRewarded(earned =>
                     {
@@ -706,9 +712,9 @@ public class CerealBoard : MonoBehaviour
                         }
                     });
                 }
-                buttonY += Screen.height * 0.09f;
+                buttonY += Screen.height * 0.095f;
             }
-            if (GUI.Button(new Rect(cx - 160, buttonY, 320, Screen.height * 0.07f), "Nochmal versuchen", button))
+            if (GUI.Button(new Rect(cx - 160, buttonY, 320, Screen.height * 0.075f), "Nochmal versuchen", GameGui.Button))
                 LoadLevel(level);
         }
     }
