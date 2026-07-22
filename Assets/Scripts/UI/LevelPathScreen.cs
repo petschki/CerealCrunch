@@ -11,17 +11,19 @@ using UnityEngine.UI;
 /// Cerealia art: replace Assets/Resources/Cereals/cerealia.png to swap.
 public class LevelPathScreen : MonoBehaviour
 {
-    // Normalized positions (x, y from bottom) of the 8 node slots on the map
+    // Normalized positions (x, y from bottom) of the 8 node slots on the
+    // landscape map (Nano-Banana render, 1408x768): the chocolate-cookie
+    // plates along the S-curve from the "#1" arch to the pancake podium.
     static readonly Vector2[] NodeAnchors =
     {
-        new Vector2(0.24f, 0.126f),
-        new Vector2(0.42f, 0.126f),
-        new Vector2(0.60f, 0.126f),
-        new Vector2(0.78f, 0.219f),
-        new Vector2(0.70f, 0.375f),
-        new Vector2(0.48f, 0.375f),
-        new Vector2(0.26f, 0.448f),
-        new Vector2(0.38f, 0.585f)
+        new Vector2(0.225f, 0.225f), // start plate "#1", bottom left
+        new Vector2(0.222f, 0.503f), // up the left edge
+        new Vector2(0.235f, 0.685f), // top left
+        new Vector2(0.370f, 0.700f), // along the top, before the honey jar
+        new Vector2(0.510f, 0.665f), // top center, across the milk river
+        new Vector2(0.600f, 0.325f), // down past the strawberry cream
+        new Vector2(0.735f, 0.210f), // bottom right, at the pancake stack
+        new Vector2(0.845f, 0.360f)  // climbing toward the goal cake
     };
 
     const float HopDuration = 0.55f;
@@ -74,12 +76,9 @@ public class LevelPathScreen : MonoBehaviour
         var mapImage = mapRect.gameObject.AddComponent<Image>();
         mapImage.sprite = Resources.Load<Sprite>("Cereals/path_map");
         var fitter = mapRect.gameObject.AddComponent<AspectRatioFitter>();
-        // The map artwork is portrait (1:2). In landscape, letterbox it in the
-        // center; in portrait, crop-fill as before.
-        fitter.aspectMode = (float)Screen.width / Screen.height >= 1f
-            ? AspectRatioFitter.AspectMode.FitInParent
-            : AspectRatioFitter.AspectMode.EnvelopeParent;
-        fitter.aspectRatio = 0.5f;
+        // Landscape map artwork, crop-filled like the game itself
+        fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+        fitter.aspectRatio = 1408f / 768f;
 
         var skip = mapRect.gameObject.AddComponent<Button>();
         skip.transition = Selectable.Transition.None;
