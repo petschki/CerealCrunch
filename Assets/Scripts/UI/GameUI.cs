@@ -11,6 +11,22 @@ using UnityEngine.UI;
 public class GameUI : MonoBehaviour
 {
     static Sprite panelSprite, buttonSprite, buttonPressedSprite;
+    static TMP_FontAsset displayFont, bodyFont;
+
+    /// Chunky comic display font for headlines, buttons and HUD chips.
+    /// Created as dynamic TMP asset at runtime (glyphs added on demand).
+    public static TMP_FontAsset DisplayFont =>
+        displayFont != null ? displayFont : displayFont = LoadFont("Fonts/LilitaOne-Regular");
+
+    /// Rounded comic body font for dialog and description text.
+    public static TMP_FontAsset BodyFont =>
+        bodyFont != null ? bodyFont : bodyFont = LoadFont("Fonts/Baloo2-ExtraBold");
+
+    static TMP_FontAsset LoadFont(string path)
+    {
+        var font = Resources.Load<Font>(path);
+        return font != null ? TMP_FontAsset.CreateFontAsset(font) : null;
+    }
 
     // Modal overlay counter: while any full-screen screen (story, café,
     // level path) is open, world input on the board is blocked.
@@ -185,7 +201,10 @@ public class GameUI : MonoBehaviour
         tmp.text = text;
         tmp.fontSize = size;
         tmp.color = color;
-        tmp.fontStyle = FontStyles.Bold;
+        if (DisplayFont != null)
+            tmp.font = DisplayFont; // already chunky — no faux bold on top
+        else
+            tmp.fontStyle = FontStyles.Bold;
         tmp.alignment = TextAlignmentOptions.Center;
         tmp.raycastTarget = false;
         return tmp;

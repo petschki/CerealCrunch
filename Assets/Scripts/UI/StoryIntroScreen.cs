@@ -109,6 +109,7 @@ public class StoryIntroScreen : MonoBehaviour
         bodyText = GameUI.CreateText("Body", panel.transform, "", 44f, new Color(0.25f, 0.16f, 0.08f));
         bodyText.alignment = TextAlignmentOptions.TopLeft;
         bodyText.fontStyle = FontStyles.Normal;
+        if (GameUI.BodyFont != null) bodyText.font = GameUI.BodyFont; // Fließtext: runde Lesevariante
         var brt = bodyText.rectTransform;
         brt.anchorMin = Vector2.zero;
         brt.anchorMax = Vector2.one;

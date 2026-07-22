@@ -18,7 +18,10 @@ public class FloatingText : MonoBehaviour
         var tmp = go.AddComponent<TextMeshPro>();
         tmp.text = text;
         tmp.fontSize = 9f;
-        tmp.fontStyle = FontStyles.Bold;
+        if (GameUI.DisplayFont != null)
+            tmp.font = GameUI.DisplayFont;
+        else
+            tmp.fontStyle = FontStyles.Bold;
         tmp.alignment = TextAlignmentOptions.Center;
         tmp.enableWordWrapping = false;
         tmp.color = color;

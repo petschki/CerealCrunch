@@ -94,6 +94,7 @@ public class CafeScreen : MonoBehaviour
 
         stepText = GameUI.CreateText("Step", bar.transform, "", 40f, Color.white);
         stepText.alignment = TextAlignmentOptions.Left;
+        if (GameUI.BodyFont != null) stepText.font = GameUI.BodyFont;
         var strt = stepText.rectTransform;
         GameUI.Stretch(strt);
         strt.offsetMin = new Vector2(40f, 0f);
