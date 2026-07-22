@@ -203,7 +203,40 @@ ersetzen.)
 
 ---
 
-## 8. Später (nächste Kapitel)
+## 8. App-Icon
+
+Ziel: `Tools/art/refs/app_icon.png`, quadratisch, mindestens 1024×1024
+(App-Store-Größe). Ich übernehme dann die Unity-Einbindung (Icon-Slots).
+
+**Regeln fürs Icon:** iOS rundet die Ecken selbst ab — das Bild muss
+randlos bis in alle vier Ecken gefüllt sein (KEINE abgerundeten Ecken,
+kein Rahmen, keine Transparenz im Bild). Kein Text — der App-Name steht
+darunter. Ein einziges Hero-Motiv, das auch bei 60×60 Pixel noch knallt.
+
+> App-Icon für ein fröhliches Match-3-Spiel im Comic-Stil: Nahaufnahme
+> von Cerealia (junge Frau mit lockigem kastanienbraunem Haar und blauem
+> Haarband, siehe Referenzbild), die fröhlich zwinkert und einen Löffel
+> voll bunter Müsli-Zerealien mit Gesichtern hochhält — eine gelbe
+> Banane, eine blaue Heidelbeere mit Sonnenbrille, eine rote Cranberry,
+> alle lachen. Warmer orange-gelber Hintergrund mit weichem Strahlen-
+> Verlauf. Kräftige dunkle Outlines, satte Farben, hoher Kontrast.
+> Das Motiv füllt das komplette quadratische Bild randlos, Gesicht
+> mittig. Kein Text, keine abgerundeten Ecken, kein Rahmen.
+
+Referenzbilder anhängen: `cerealia_promo.png` + einen der Spielsteine.
+
+**Alternative (ohne Cerealia, reine Steine-Variante):**
+
+> App-Icon für ein Match-3-Spiel: eine überquellende blaue Müslischüssel,
+> aus der drei knuffige Zerealien-Charaktere mit großen Cartoon-Gesichtern
+> herausspringen (gelbe Banane, rote Cranberry, blaue Heidelbeere mit
+> Sonnenbrille), dazu Milchspritzer und kleine Sterne. Warmer
+> orange-gelber Hintergrund mit Strahlen-Verlauf. Kräftige Outlines,
+> hoher Kontrast, Motiv füllt das Quadrat randlos. Kein Text.
+
+---
+
+## 9. Später (nächste Kapitel)
 
 Noch nicht einbauen — erst wenn Kapitel 2/3 dran sind:
 
