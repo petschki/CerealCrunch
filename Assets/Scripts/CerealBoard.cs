@@ -13,7 +13,7 @@ public class CerealBoard : MonoBehaviour
     public int Height = 8;
     public float SwapDuration = 0.16f;
     public float FallDurationPerCell = 0.09f;
-    public float PieceScale = 0.86f;
+    public float PieceScale = 0.95f;
 
     static readonly string[] SpriteNames = { "raisin", "hazelnut", "oats", "cranberry", "banana", "blueberry", "cornflake" };
     static readonly string[] CharacterNames = { "Ray Sin", "Hazel Nuts", "Oatis", "Cran Berry", "B-Nana", "Barry Blue", "Corny Flake" };
