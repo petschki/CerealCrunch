@@ -147,7 +147,63 @@ Bescheid geben. Querformat 16:9 oder breiter.
 
 ---
 
-## 6. Später (nächste Kapitel)
+## 6. Die 7 Zerealien-Spielsteine
+
+Ersetzen die SVG-Steine in `Assets/Resources/Cereals/` (raisin, hazelnut,
+oats, cranberry, banana, blueberry, cornflake — Dateinamen beibehalten).
+**Jedes Teil einzeln generieren**, quadratisch 1:1. Ich mache die
+Hintergründe transparent und skaliere auf Spielsteingröße.
+
+**Wichtig fürs Gameplay:** Die Steine sind im Spiel nur fingernagelgroß —
+sie brauchen eine einfache, fette Silhouette, EINE dominante Signaturfarbe
+und ein großes Gesicht. Kein Schnickschnack, keine Arme/Beine, keine
+Requisiten.
+
+**Stil-Baustein für alle 7** (nach dem ersten gelungenen Stein: diesen
+immer als Referenzbild mitgeben, damit Strichstärke und Look gleich bleiben):
+
+> Knuffiger Spielstein für ein Match-3-Spiel im Comic-Stil: [BESCHREIBUNG],
+> mit großem fröhlichem Cartoon-Gesicht direkt auf der Oberfläche (große
+> Augen, ausdrucksstarker Mund). Sehr dicke dunkle Outline, eine kräftige
+> dominante Farbe, weiche einfache Formen, leichter Glanzpunkt. Figur
+> zentriert, füllt 80 % des Bildes, Vorderansicht. Einfarbiger hellgrauer
+> Hintergrund, kein Schatten, kein Text. Quadratisch.
+
+Die 7 Beschreibungen (Signaturfarbe muss stimmen — sie entspricht der
+Callout-Farbe im Spiel):
+
+| Datei | Figur | [BESCHREIBUNG] |
+|---|---|---|
+| `raisin.png` | Ray Sin | eine pralle runde **violette Rosine** mit verschmitztem Grinsen und frechen Augenbrauen |
+| `hazelnut.png` | Hazel Nuts | eine glänzende **braune Haselnuss** mit heller Spitze, die vergnügt zwinkert |
+| `oats.png` | Oatis | ein **goldbeiger Haferflocken-Cluster** (Knusper-Kugel) mit entspanntem, verschlafenem Lächeln |
+| `cranberry.png` | Cran Berry | eine leuchtend **rote Cranberry** mit breitem, übermütigem Grinsen |
+| `banana.png` | B-Nana | eine gebogene **knallgelbe Banane** (Halbmondform) mit ansteckendem Lachen |
+| `blueberry.png` | Barry Blue | eine coole **blaue Heidelbeere** mit Sonnenbrille und lässigem Lächeln |
+| `cornflake.png` | Corny Flake | eine gewellte **orange-goldene Cornflake** mit albernem, schiefem Grinsen und Zunge im Mundwinkel |
+
+---
+
+## 7. Match-3-Hintergrund (Frühstückstisch)
+
+Ersetzt `Assets/Resources/Cereals/bowl_table.png`. Querformat 16:9,
+mindestens 1408×768. **Das Spielbrett verdeckt die Bildmitte komplett** —
+die Deko muss an die Ränder, die Mitte bleibt ruhige Tischfläche.
+
+> Ein fröhlich gedeckter Frühstückstisch von schräg oben im Comic-Stil,
+> als Bühne für ein Match-3-Spielbrett: Die Bildmitte ist eine ruhige,
+> freie Tischdecke ohne Objekte. Am linken Rand eine große Müslischüssel
+> mit Milch und Beeren und eine Milchkanne, am rechten Rand bunte
+> Müslipackungen, ein Glas Orangensaft und eine Honigwaage, am oberen
+> Rand verstreute Cornflakes, Beeren und ein Löffel. Warme freundliche
+> Farben, kräftige Outlines. Querformat.
+
+(Falls „Honigwaage" komische Ergebnisse liefert: durch „ein Honigglas"
+ersetzen.)
+
+---
+
+## 8. Später (nächste Kapitel)
 
 Noch nicht einbauen — erst wenn Kapitel 2/3 dran sind:
 
@@ -156,13 +212,15 @@ Noch nicht einbauen — erst wenn Kapitel 2/3 dran sind:
   Türen zu kleinen Zimmern …" (gleiche Stufenlogik wie das Café)
 - **Garten hinter dem Haus**: verwilderte Terrasse mit zugewachsenen
   Beeten → gemütlicher Frühstücksgarten mit Tischen unter einer Pergola
-- **Zerealien-Charaktere neu**: die 7 Spielstein-Gesichter (Ray Sin,
-  Hazel Nuts, Oatis, Cran Berry, B-Nana, Barry Blue, Corny Flake) im
-  Stil der Werbefigur, je einzeln, quadratisch, freigestellt
+- **UI-Set**: Holz-Buttons, Panel-Rahmen, Sterne-Chip im Stil der Karte
 
 ## Checkliste nach dem Generieren
 
-1. Datei unter dem exakten Namen an den angegebenen Ort legen (überschreiben)
+1. Datei unter dem exakten Namen an den angegebenen Ort legen — oder
+   einfach in `~/Downloads` lassen und mir Bescheid geben, ich sortiere ein
 2. Unity kurz fokussieren (importiert automatisch als Sprite)
-3. Bei Karte (Nr. 5) und Character-Sheet (Nr. 2): mir Bescheid geben —
+3. Bei den Spielsteinen (Nr. 6) und dem Hintergrund (Nr. 7) übernehme ich
+   die Nachbearbeitung: Hintergrund transparent, auf Spielsteingröße
+   skalieren, Kontrast-Check auf dem Board
+4. Bei Karte (Nr. 5) und Character-Sheet (Nr. 2): mir Bescheid geben —
    da hängt Code/Rigging dran
