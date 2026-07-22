@@ -14,6 +14,12 @@ public static class BuildIos
     [MenuItem("Tools/CerealCrunch/Build iOS (Xcode Project)")]
     public static void Build()
     {
+        // The [InitializeOnLoad] configurators rely on delayCall, which never
+        // fires in batch mode — apply them explicitly so batch builds always
+        // carry the correct orientation and app icon.
+        ConfigureLandscape.Apply();
+        ConfigureAppIcon.Apply();
+
         PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.iOS, BundleId);
         PlayerSettings.companyName = "Kombinat";
         PlayerSettings.iOS.appleEnableAutomaticSigning = true;
