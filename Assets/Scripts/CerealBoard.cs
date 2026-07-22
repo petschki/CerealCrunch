@@ -117,6 +117,7 @@ public class CerealBoard : MonoBehaviour
     Vector2 dragStartWorld;
     GameUI ui;
     LevelPathScreen pathScreen;
+    CafeScreen cafeScreen;
 
     // Hint: after some idle time, pulse the pieces of one possible move
     const float HintDelay = 6f;
@@ -127,7 +128,10 @@ public class CerealBoard : MonoBehaviour
     void Start()
     {
         if (ResetProgressOnStart)
+        {
             PlayerPrefs.DeleteKey(LevelPrefsKey);
+            RenovationState.ResetAll();
+        }
 
         _ = AdsManager.Instance; // initialize early so ads are preloaded
         _ = AudioManager.Instance; // starts the music loop
@@ -136,7 +140,18 @@ public class CerealBoard : MonoBehaviour
         BuildTableBackground();
         ui = GameUI.Create();
         pathScreen = LevelPathScreen.Create();
-        LoadLevel(PlayerPrefs.GetInt(LevelPrefsKey, 1));
+        cafeScreen = CafeScreen.Create();
+
+        // Flow: (einmalige Story) -> Café-Ansicht -> Level
+        int startLevel = PlayerPrefs.GetInt(LevelPrefsKey, 1);
+        if (!RenovationState.StorySeen)
+            StoryIntroScreen.Show(() =>
+            {
+                RenovationState.StorySeen = true;
+                cafeScreen.Show(startLevel, () => LoadLevel(startLevel));
+            });
+        else
+            cafeScreen.Show(startLevel, () => LoadLevel(startLevel));
     }
 
     void LoadSprites()
@@ -348,7 +363,8 @@ public class CerealBoard : MonoBehaviour
 
     void Update()
     {
-        if (busy || state != GameState.Playing || AdsManager.IsShowingAd) return;
+        if (busy || grid == null || GameUI.InputBlocked ||
+            state != GameState.Playing || AdsManager.IsShowingAd) return;
 
         idleTime += Time.deltaTime;
         if (idleTime >= HintDelay && hintRoutine == null)
@@ -434,12 +450,14 @@ public class CerealBoard : MonoBehaviour
             AudioManager.Play("win");
             PlayerPrefs.SetInt(LevelPrefsKey, level + 1);
             PlayerPrefs.Save();
+            RenovationState.Stars++; // one renovation star per completed level
             ui.ShowWin(level + 1, () =>
                 AdsManager.Instance.MaybeShowInterstitial(level, () =>
                 {
-                    // Path screen with Cerealia's hop, then the next level
+                    // Path hop, then the café (spend stars), then the next level
                     ui.HideOverlays();
-                    pathScreen.Show(level, level + 1, () => LoadLevel(level + 1));
+                    pathScreen.Show(level, level + 1, () =>
+                        cafeScreen.Show(level + 1, () => LoadLevel(level + 1)));
                 }));
         }
         else if (movesLeft <= 0)

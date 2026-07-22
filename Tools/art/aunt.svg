@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Großtante Ottilie: chibi elderly lady — silver bun, round glasses,
+       lilac cardigan, floral dress, cane, warm smile. Style matches cerealia.svg -->
+
+  <!-- bun -->
+  <circle cx="128" cy="30" r="24" fill="#d8d4d0" stroke="#232b38" stroke-width="7"/>
+  <circle cx="128" cy="30" r="9" fill="#c2bcb6"/>
+
+  <!-- legs and shoes -->
+  <rect x="108" y="216" width="14" height="24" fill="#f8cfa6" stroke="#232b38" stroke-width="6"/>
+  <rect x="134" y="216" width="14" height="24" fill="#f8cfa6" stroke="#232b38" stroke-width="6"/>
+  <ellipse cx="112" cy="243" rx="16" ry="9" fill="#8a5a7a" stroke="#232b38" stroke-width="6"/>
+  <ellipse cx="142" cy="243" rx="16" ry="9" fill="#8a5a7a" stroke="#232b38" stroke-width="6"/>
+
+  <!-- floral dress -->
+  <path d="M100 150 L 156 150 L 172 222 L 84 222 Z" fill="#b48ac2" stroke="#232b38" stroke-width="7"/>
+  <g fill="#e8d5ee">
+    <circle cx="108" cy="184" r="6"/><circle cx="134" cy="196" r="6"/><circle cx="152" cy="176" r="6"/><circle cx="120" cy="210" r="6"/>
+  </g>
+
+  <!-- cardigan -->
+  <path d="M96 148 L 116 144 L 116 200 L 90 204 Z" fill="#8a5a7a" stroke="#232b38" stroke-width="7"/>
+  <path d="M160 148 L 140 144 L 140 200 L 166 204 Z" fill="#8a5a7a" stroke="#232b38" stroke-width="7"/>
+
+  <!-- left arm waving -->
+  <path d="M102 154 Q 74 140 66 116" fill="none" stroke="#232b38" stroke-width="19" stroke-linecap="round"/>
+  <path d="M102 154 Q 74 140 66 116" fill="none" stroke="#f8cfa6" stroke-width="11" stroke-linecap="round"/>
+
+  <!-- right arm on cane -->
+  <path d="M156 158 Q 180 168 188 184" fill="none" stroke="#232b38" stroke-width="19" stroke-linecap="round"/>
+  <path d="M156 158 Q 180 168 188 184" fill="none" stroke="#f8cfa6" stroke-width="11" stroke-linecap="round"/>
+  <rect x="186" y="184" width="9" height="58" rx="4" fill="#c98a3c" stroke="#232b38" stroke-width="5"/>
+  <path d="M182 186 Q 180 174 192 174 Q 202 174 200 186" fill="none" stroke="#232b38" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- face -->
+  <ellipse cx="128" cy="98" rx="48" ry="45" fill="#f8cfa6" stroke="#232b38" stroke-width="8"/>
+  <!-- silver hair frame -->
+  <path d="M80 92 Q 82 52 128 48 Q 174 52 176 92 Q 160 66 128 66 Q 96 66 80 92 Z"
+        fill="#d8d4d0" stroke="#232b38" stroke-width="7" stroke-linejoin="round"/>
+  <!-- round glasses -->
+  <g fill="none" stroke="#232b38" stroke-width="6">
+    <circle cx="106" cy="98" r="17" fill="#ffffff" fill-opacity="0.55"/>
+    <circle cx="150" cy="98" r="17" fill="#ffffff" fill-opacity="0.55"/>
+    <path d="M123 98 h 10"/>
+  </g>
+  <circle cx="108" cy="100" r="5" fill="#5a4a3a"/>
+  <circle cx="148" cy="100" r="5" fill="#5a4a3a"/>
+  <!-- brows, smile, blush -->
+  <path d="M94 78 q 12 -6 24 -2 M 138 76 q 12 -4 24 4" fill="none" stroke="#b0a89e" stroke-width="6" stroke-linecap="round"/>
+  <path d="M108 124 Q 128 138 148 122" fill="none" stroke="#232b38" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="92" cy="112" rx="9" ry="6" fill="#f0a08a" opacity="0.7"/>
+  <ellipse cx="164" cy="112" rx="9" ry="6" fill="#f0a08a" opacity="0.7"/>
+  <!-- laugh lines -->
+  <path d="M84 96 q -6 6 0 12 M 172 96 q 6 6 0 12" fill="none" stroke="#d9a878" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- pearl earrings + brooch -->
+  <circle cx="80" cy="110" r="5" fill="#fdfaf0" stroke="#232b38" stroke-width="4"/>
+  <circle cx="176" cy="110" r="5" fill="#fdfaf0" stroke="#232b38" stroke-width="4"/>
+  <circle cx="128" cy="152" r="8" fill="#f2c94c" stroke="#232b38" stroke-width="5"/>
+</svg>

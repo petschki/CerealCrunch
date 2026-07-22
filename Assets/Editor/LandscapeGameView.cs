@@ -3,16 +3,16 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-/// Adds a "9:19.5 Portrait" aspect to the Game view and selects it once per
+/// Adds a "19.5:9 Landscape" aspect to the Game view and selects it once per
 /// editor session, so the editor preview matches the phone layout.
 /// The Game view size list has no public API, hence the reflection.
 [InitializeOnLoad]
-public static class PortraitGameView
+public static class LandscapeGameView
 {
-    const string Label = "9:19.5 Portrait";
-    const string SessionKey = "CerealCrunch.PortraitApplied";
+    const string Label = "19.5:9 Landscape";
+    const string SessionKey = "CerealCrunch.LandscapeApplied";
 
-    static PortraitGameView()
+    static LandscapeGameView()
     {
         EditorApplication.delayCall += () =>
         {
@@ -22,7 +22,7 @@ public static class PortraitGameView
         };
     }
 
-    [MenuItem("Tools/CerealCrunch/Use Portrait Game View")]
+    [MenuItem("Tools/CerealCrunch/Use Landscape Game View")]
     public static void Apply()
     {
         try
@@ -38,13 +38,13 @@ public static class PortraitGameView
             int index = FindSize(group, Label);
             if (index < 0)
             {
-                // 18:39 == 9:19.5 (aspect ratios must be integers)
-                AddCustomSize(asm, group, 18, 39, Label);
+                // 39:18 == 19.5:9 (aspect ratios must be integers)
+                AddCustomSize(asm, group, 39, 18, Label);
                 index = FindSize(group, Label);
             }
             if (index < 0)
             {
-                Debug.LogWarning("PortraitGameView: could not register the portrait size.");
+                Debug.LogWarning("LandscapeGameView: could not register the landscape size.");
                 return;
             }
 
@@ -52,12 +52,12 @@ public static class PortraitGameView
             var window = EditorWindow.GetWindow(gameViewType);
             gameViewType.GetMethod("SizeSelectionCallback")
                 .Invoke(window, new object[] { index, null });
-            Debug.Log($"PortraitGameView: Game view switched to '{Label}'.");
+            Debug.Log($"LandscapeGameView: Game view switched to '{Label}'.");
         }
         catch (Exception e)
         {
-            Debug.LogWarning("PortraitGameView: reflection failed (" + e.Message +
-                "). Please select a portrait aspect manually in the Game view dropdown.");
+            Debug.LogWarning("LandscapeGameView: reflection failed (" + e.Message +
+                "). Please select a landscape aspect manually in the Game view dropdown.");
         }
     }
 

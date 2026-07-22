@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Renovation star currency -->
+  <path d="M64 8 L 80 46 L 122 50 L 90 78 L 100 120 L 64 97 L 28 120 L 38 78 L 6 50 L 48 46 Z"
+        fill="#f2c94c" stroke="#232b38" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M64 26 L 74 50 L 100 53 L 80 70 Z" fill="#f8de8a"/>
+  <circle cx="52" cy="60" r="5" fill="#f8de8a"/>
+</svg>

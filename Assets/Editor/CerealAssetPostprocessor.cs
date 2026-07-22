@@ -1,12 +1,13 @@
 using UnityEditor;
 using UnityEngine;
 
-/// Automatically configures all PNGs in the Cereals folder as sprites.
+/// Automatically configures all PNGs in the game art folders as sprites.
 public class CerealAssetPostprocessor : AssetPostprocessor
 {
     void OnPreprocessTexture()
     {
-        if (!assetPath.Replace('\\', '/').Contains("Resources/Cereals")) return;
+        string path = assetPath.Replace('\\', '/');
+        if (!path.Contains("Resources/Cereals") && !path.Contains("Resources/CerealCrunchCafe")) return;
 
         var importer = (TextureImporter)assetImporter;
         importer.textureType = TextureImporterType.Sprite;

@@ -12,6 +12,13 @@ public class GameUI : MonoBehaviour
 {
     static Sprite panelSprite, buttonSprite, buttonPressedSprite;
 
+    // Modal overlay counter: while any full-screen screen (story, café,
+    // level path) is open, world input on the board is blocked.
+    static int modalCount;
+    public static bool InputBlocked => modalCount > 0;
+    public static void PushModal() => modalCount++;
+    public static void PopModal() => modalCount = Mathf.Max(0, modalCount - 1);
+
     public static Sprite PanelSprite =>
         panelSprite != null ? panelSprite : panelSprite = Resources.Load<Sprite>("Cereals/ui_panel");
     public static Sprite ButtonSprite =>
@@ -105,6 +112,9 @@ public class GameUI : MonoBehaviour
 
         // Overlays
         winOverlay = BuildOverlay("WinOverlay", "Level geschafft!", out _);
+        var starLine = CreateText("StarLine", winOverlay.transform, "+1 Stern für die Renovierung!", 56f,
+            new Color(1f, 0.85f, 0.3f));
+        Place(starLine.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 130f), new Vector2(1100f, 90f));
         var continueButton = CreateButton("ContinueButton", winOverlay.transform, "Weiter",
             new Vector2(640f, 150f), () => onContinue?.Invoke());
         Place(continueButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0f, -60f), new Vector2(640f, 150f));
@@ -144,8 +154,8 @@ public class GameUI : MonoBehaviour
         canvas.sortingOrder = sortingOrder;
         var scaler = go.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1170f, 2532f);
-        scaler.matchWidthOrHeight = 0.5f;
+        scaler.referenceResolution = new Vector2(2532f, 1170f);
+        scaler.matchWidthOrHeight = 1f; // landscape: match height
         go.AddComponent<GraphicRaycaster>();
         return canvas;
     }

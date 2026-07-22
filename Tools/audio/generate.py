@@ -150,6 +150,27 @@ def gen_crunch():
     write_wav("crunch", s, peak=0.7)
 
 
+def gen_build():
+    """Renovation step: three hammer knocks, then a bright sparkle arpeggio."""
+    total = int(1.9 * SR)
+    buf = np.zeros(total)
+    rng = np.random.default_rng(7)
+    for t0 in (0.0, 0.28, 0.56):
+        start = int(t0 * SR)
+        n = int(0.16 * SR)
+        t = np.arange(n) / SR
+        f = 110 * np.exp(-t * 18)  # falling-pitch thump
+        phase = 2 * np.pi * np.cumsum(f) / SR
+        thump = np.sin(phase) * np.exp(-t * 30)
+        crack = np.diff(rng.standard_normal(n + 1)) * np.exp(-t * 60) * 0.6
+        buf[start:start + n] += thump + crack
+    for i, f in enumerate([659.25, 783.99, 987.77, 1318.5]):  # E5 G5 B5 E6
+        start = int((0.9 + i * 0.09) * SR)
+        tone = pluck(f, 0.5, decay=7.0) * 0.5
+        buf[start:start + len(tone)] += tone
+    write_wav("build", buf, peak=0.7)
+
+
 # ---------- Music loop ----------
 
 NOTE = {
@@ -222,6 +243,7 @@ if __name__ == "__main__":
     gen_invalid()
     gen_button()
     gen_hop()
+    gen_build()
     gen_win()
     gen_lose()
     gen_music()

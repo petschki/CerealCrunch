@@ -65,13 +65,20 @@ public class LevelPathScreen : MonoBehaviour
         var holder = GameUI.CreateRect("Background", transform);
         GameUI.Stretch(holder);
         holder.gameObject.AddComponent<RectMask2D>();
+        // warm backdrop behind the (portrait) map artwork in landscape
+        var backdrop = holder.gameObject.AddComponent<Image>();
+        backdrop.color = new Color(0.94f, 0.87f, 0.74f);
 
         mapRect = GameUI.CreateRect("Map", holder);
         GameUI.Stretch(mapRect);
         var mapImage = mapRect.gameObject.AddComponent<Image>();
         mapImage.sprite = Resources.Load<Sprite>("Cereals/path_map");
         var fitter = mapRect.gameObject.AddComponent<AspectRatioFitter>();
-        fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+        // The map artwork is portrait (1:2). In landscape, letterbox it in the
+        // center; in portrait, crop-fill as before.
+        fitter.aspectMode = (float)Screen.width / Screen.height >= 1f
+            ? AspectRatioFitter.AspectMode.FitInParent
+            : AspectRatioFitter.AspectMode.EnvelopeParent;
         fitter.aspectRatio = 0.5f;
 
         var skip = mapRect.gameObject.AddComponent<Button>();
