@@ -11,19 +11,22 @@ using UnityEngine.UI;
 /// Cerealia art: replace Assets/Resources/Cereals/cerealia.png to swap.
 public class LevelPathScreen : MonoBehaviour
 {
-    // Normalized positions (x, y from bottom) of the 8 node slots on the
-    // landscape map (Nano-Banana render, 1408x768): the chocolate-cookie
-    // plates along the S-curve from the "#1" arch to the pancake podium.
+    // Normalized positions (x, y from bottom) of the 10 node slots on the
+    // landscape map (gpt-image render, 1672x941): the wooden plates from the
+    // start arch to the pancake podium, centers measured by color detection
+    // (Tools: siehe Sitzung — Teller-Innenholz ~RGB 250/210/143).
     static readonly Vector2[] NodeAnchors =
     {
-        new Vector2(0.225f, 0.225f), // start plate "#1", bottom left
-        new Vector2(0.222f, 0.503f), // up the left edge
-        new Vector2(0.235f, 0.685f), // top left
-        new Vector2(0.370f, 0.700f), // along the top, before the honey jar
-        new Vector2(0.510f, 0.665f), // top center, across the milk river
-        new Vector2(0.600f, 0.325f), // down past the strawberry cream
-        new Vector2(0.735f, 0.210f), // bottom right, at the pancake stack
-        new Vector2(0.845f, 0.360f)  // climbing toward the goal cake
+        new Vector2(0.248f, 0.147f), // start plate at the arch
+        new Vector2(0.338f, 0.186f),
+        new Vector2(0.429f, 0.238f),
+        new Vector2(0.493f, 0.321f),
+        new Vector2(0.595f, 0.372f), // past the strawberries
+        new Vector2(0.655f, 0.450f),
+        new Vector2(0.605f, 0.552f), // crossing the milk river
+        new Vector2(0.574f, 0.678f), // onto the plateau
+        new Vector2(0.692f, 0.651f),
+        new Vector2(0.786f, 0.699f)  // last stop before the podium
     };
 
     const float HopDuration = 0.55f;
@@ -78,7 +81,7 @@ public class LevelPathScreen : MonoBehaviour
         var fitter = mapRect.gameObject.AddComponent<AspectRatioFitter>();
         // Landscape map artwork, crop-filled like the game itself
         fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
-        fitter.aspectRatio = 1408f / 768f;
+        fitter.aspectRatio = 1672f / 941f;
 
         var skip = mapRect.gameObject.AddComponent<Button>();
         skip.transition = Selectable.Transition.None;
