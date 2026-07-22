@@ -175,24 +175,26 @@ public class CerealBoard : MonoBehaviour
         cam.clearFlags = CameraClearFlags.SolidColor;
         cam.backgroundColor = new Color(0.985f, 0.945f, 0.87f);
 
-        // The board plus margin must fit in both directions
-        float halfHeight = Height / 2f + 1.6f;
-        float halfWidth = (Width / 2f + 0.7f) / cam.aspect;
-        float size = Mathf.Max(halfHeight, halfWidth);
-        cam.orthographicSize = size;
-
-        // Portrait: place the board at the bottom (full width), leaving room
-        // for HUD and background at the top. Landscape: keep the board centered.
         float camY;
+        float size;
         if (cam.aspect < 1f)
         {
+            // Portrait: board at the bottom (full width), room for HUD above
+            size = Mathf.Max(Height / 2f + 1.6f, (Width / 2f + 0.7f) / cam.aspect);
             const float bottomMargin = 1.3f;
             camY = -0.5f + size - bottomMargin;
         }
         else
         {
-            camY = (Height - 1) / 2f + 0.3f;
+            // Landscape: fill the screen height with the board, leaving just
+            // enough headroom for the HUD row and a sliver at the bottom
+            const float topMargin = 1.25f;
+            const float bottomMargin = 0.25f;
+            size = (Height + topMargin + bottomMargin) / 2f;
+            size = Mathf.Max(size, (Width / 2f + 0.7f) / cam.aspect);
+            camY = Height - 0.5f + topMargin - size;
         }
+        cam.orthographicSize = size;
         cam.transform.position = new Vector3((Width - 1) / 2f, camY, -10f);
     }
 
