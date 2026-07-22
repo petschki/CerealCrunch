@@ -12,11 +12,14 @@ public static class ConfigureLandscape
 
     public static void Apply()
     {
-        if (PlayerSettings.defaultInterfaceOrientation == UIOrientation.LandscapeLeft &&
-            !PlayerSettings.allowedAutorotateToPortrait)
+        if (PlayerSettings.defaultInterfaceOrientation == UIOrientation.AutoRotation &&
+            !PlayerSettings.allowedAutorotateToPortrait &&
+            PlayerSettings.allowedAutorotateToLandscapeRight)
             return;
 
-        PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
+        // Auto-rotation restricted to the two landscape orientations:
+        // the game follows a 180° flip of the phone, but never goes portrait.
+        PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
         PlayerSettings.allowedAutorotateToPortrait = false;
         PlayerSettings.allowedAutorotateToPortraitUpsideDown = false;
         PlayerSettings.allowedAutorotateToLandscapeLeft = true;
