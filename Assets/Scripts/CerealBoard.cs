@@ -7,7 +7,7 @@ using UnityEngine;
 public class CerealBoard : MonoBehaviour
 {
     [Tooltip("Development helper: resets level progress to level 1 on every start")]
-    public bool ResetProgressOnStart = true;
+    public bool ResetProgressOnStart = false;
 
     public int Width = 8;
     public int Height = 8;
