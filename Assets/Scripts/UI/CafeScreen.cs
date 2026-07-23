@@ -15,6 +15,7 @@ public class CafeScreen : MonoBehaviour
     TMP_Text starText, stepText, progressText;
     Button renovateButton, playButton;
     TMP_Text renovateLabel, playLabel;
+    CerealiaRig cerealia;
     Action onPlay;
     int nextLevel;
     bool busy;
@@ -36,6 +37,7 @@ public class CafeScreen : MonoBehaviour
         stageImage.sprite = RenovationState.StageSprite(RenovationState.Stage);
         SetFadeAlpha(0f);
         Refresh();
+        cerealia.Wave();
     }
 
     void Hide()
@@ -53,6 +55,10 @@ public class CafeScreen : MonoBehaviour
 
         stageImage = BuildArtLayer(holder, "Stage");
         fadeImage = BuildArtLayer(holder, "StageFade");
+
+        // Cerealia stands at the left edge as a foreground character, her feet
+        // just above the bottom bar
+        cerealia = CerealiaRig.Create((RectTransform)transform, 620f, new Vector2(-1000f, -380f));
 
         // top-left: title + renovation progress
         var titleChip = GameUI.CreatePanel("TitleChip", transform, new Color(0.24f, 0.13f, 0.05f, 0.85f));
@@ -170,6 +176,7 @@ public class CafeScreen : MonoBehaviour
 
         RenovationState.PayRenovation();
         AudioManager.Play("build");
+        cerealia.Cheer();
 
         // crossfade to the new stage image
         fadeImage.sprite = RenovationState.StageSprite(RenovationState.Stage);

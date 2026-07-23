@@ -7,7 +7,9 @@ public class CerealAssetPostprocessor : AssetPostprocessor
     void OnPreprocessTexture()
     {
         string path = assetPath.Replace('\\', '/');
-        if (!path.Contains("Resources/Cereals") && !path.Contains("Resources/CerealCrunchCafe")) return;
+        if (!path.Contains("Resources/Cereals") &&
+            !path.Contains("Resources/CerealCrunchCafe") &&
+            !path.Contains("Resources/Cerealia")) return;
 
         var importer = (TextureImporter)assetImporter;
         importer.textureType = TextureImporterType.Sprite;

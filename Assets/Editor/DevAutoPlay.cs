@@ -44,7 +44,7 @@ public static class DevAutoPlay
             {
                 story.SendMessage("Advance");
             }
-            else if (!playPressed && t > 6.0)
+            else if (!playPressed && t > 13.0)
             {
                 var cafe = Object.FindFirstObjectByType<CafeScreen>();
                 if (cafe != null && cafe.gameObject.activeSelf)
@@ -56,7 +56,7 @@ public static class DevAutoPlay
         }
 
         if (count >= 6 || now < next) return;
-        next = now + 3.0;
+        next = now + 2.0;
         System.IO.Directory.CreateDirectory("Temp/AutoShots");
         ScreenCapture.CaptureScreenshot($"Temp/AutoShots/shot_{count++}.png");
     }
