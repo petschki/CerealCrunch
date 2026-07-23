@@ -34,3 +34,7 @@ __pycache__/
 # Crash reports
 sysinfo.txt
 crashlytics-build.properties
+
+# Unity recovery scenes after an abrupt quit
+/[Aa]ssets/_Recovery/
+/[Aa]ssets/_Recovery.meta

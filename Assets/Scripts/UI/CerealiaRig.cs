@@ -12,11 +12,14 @@ using UnityEngine.UI;
 /// front arm (viewer right) needs positive values to raise outward.
 public class CerealiaRig : MonoBehaviour
 {
-    static readonly Vector2 ShoulderBack = new Vector2(-92f, 228f);
-    static readonly Vector2 ShoulderFront = new Vector2(92f, 228f);
-    static readonly Vector2 Neck = new Vector2(0f, 322f);
-    const float ElbowLength = 74f;
-    const float FootDrop = 295f; // hip → sole, for placing her on the floor
+    static readonly Vector2 ShoulderBack = new Vector2(-80f, 385f);
+    static readonly Vector2 ShoulderFront = new Vector2(80f, 385f);
+    static readonly Vector2 Neck = new Vector2(5f, 406f); // stub tucked behind the collar
+    static readonly Vector2 HipBack = new Vector2(-43f, 5f);
+    static readonly Vector2 HipFront = new Vector2(43f, 5f);
+    const float ElbowLength = 210f;
+    const float FootDrop = 357f; // hip → sole, for placing her on the floor
+    const float HeadTop = 743f;  // hip → top of the hair
 
     struct Pose
     {
@@ -25,11 +28,11 @@ public class CerealiaRig : MonoBehaviour
     }
 
     static readonly Pose Idle = new Pose
-    { BackUpper = -10f, BackLower = -6f, FrontUpper = 10f, FrontLower = 6f, Head = 0f };
+    { BackUpper = -8f, BackLower = -5f, FrontUpper = 8f, FrontLower = 5f, Head = 0f };
     static readonly Pose Waving = new Pose
-    { BackUpper = -10f, BackLower = -6f, FrontUpper = 142f, FrontLower = 26f, Head = 6f, OpenMouth = true };
+    { BackUpper = -8f, BackLower = -5f, FrontUpper = 140f, FrontLower = 24f, Head = 6f, OpenMouth = true };
     static readonly Pose Cheering = new Pose
-    { BackUpper = -138f, BackLower = -22f, FrontUpper = 138f, FrontLower = 22f, Head = 0f, OpenMouth = true };
+    { BackUpper = -136f, BackLower = -20f, FrontUpper = 136f, FrontLower = 20f, Head = 0f, OpenMouth = true };
 
     RectTransform body, backShoulder, backElbow, frontShoulder, frontElbow, headJoint, torso;
     Image headImage;
@@ -50,9 +53,7 @@ public class CerealiaRig : MonoBehaviour
         var rig = root.gameObject.AddComponent<CerealiaRig>();
         rig.Build();
 
-        // source sheet: sole at -FootDrop, top of head ≈ +561
-        const float sourceHeight = FootDrop + 561f;
-        float scale = height / sourceHeight;
+        float scale = height / (FootDrop + HeadTop);
         root.localScale = new Vector3(scale, scale, 1f);
         root.anchoredPosition = floorPosition + new Vector2(0f, FootDrop * scale);
         return rig;
@@ -70,25 +71,26 @@ public class CerealiaRig : MonoBehaviour
         // sibling order = draw order: back arm, legs, torso, head, front arm
         BuildArm("Back", ShoulderBack, "arm_l_upper", "arm_l_lower",
             out backShoulder, out backElbow);
-        AddPart("Legs", body, "legs", Vector2.zero, new Vector2(0.5f, 0.94f));
-        torso = AddPart("Torso", body, "torso", Vector2.zero, new Vector2(0.5f, 0.06f)).rectTransform;
+        AddPart("LegBack", body, "leg_l", HipBack, new Vector2(0.5f, 0.97f));
+        AddPart("LegFront", body, "leg_r", HipFront, new Vector2(0.5f, 0.97f));
+        torso = AddPart("Torso", body, "torso", Vector2.zero, new Vector2(0.49f, 0f)).rectTransform;
 
         headJoint = Joint("HeadJoint", body, Neck);
-        headImage = AddPart("Head", headJoint, "head_smile", Vector2.zero, new Vector2(0.5f, 0.12f));
+        headImage = AddPart("Head", headJoint, "head_smile", Vector2.zero, new Vector2(0.55f, 0f));
 
         BuildArm("Front", ShoulderFront, "arm_r_upper", "arm_r_lower",
             out frontShoulder, out frontElbow);
 
-        ApplyPose(Idle, 1f);
+        ApplyPose(Idle);
     }
 
     void BuildArm(string name, Vector2 shoulder, string upperSprite, string lowerSprite,
         out RectTransform shoulderJoint, out RectTransform elbowJoint)
     {
         shoulderJoint = Joint(name + "Shoulder", body, shoulder);
-        AddPart(name + "Upper", shoulderJoint, upperSprite, Vector2.zero, new Vector2(0.5f, 0.88f));
+        AddPart(name + "Upper", shoulderJoint, upperSprite, Vector2.zero, new Vector2(0.5f, 0.93f));
         elbowJoint = Joint(name + "Elbow", shoulderJoint, new Vector2(0f, -ElbowLength));
-        AddPart(name + "Lower", elbowJoint, lowerSprite, Vector2.zero, new Vector2(0.5f, 0.92f));
+        AddPart(name + "Lower", elbowJoint, lowerSprite, Vector2.zero, new Vector2(0.5f, 0.95f));
     }
 
     static RectTransform Joint(string name, Transform parent, Vector2 position)
@@ -152,11 +154,11 @@ public class CerealiaRig : MonoBehaviour
         for (float t = 0f; t < duration; t += Time.deltaTime)
         {
             float p = Mathf.SmoothStep(0f, 1f, t / duration);
-            ApplyPose(Lerp(from, to, p), 1f);
+            ApplyPose(Lerp(from, to, p));
             yield return null;
         }
         current = to;
-        ApplyPose(to, 1f);
+        ApplyPose(to);
     }
 
     static Pose Lerp(Pose a, Pose b, float t) => new Pose
@@ -169,7 +171,7 @@ public class CerealiaRig : MonoBehaviour
         OpenMouth = b.OpenMouth
     };
 
-    void ApplyPose(Pose p, float weight)
+    void ApplyPose(Pose p)
     {
         SetAngle(backShoulder, p.BackUpper);
         SetAngle(backElbow, p.BackLower);
