@@ -69,29 +69,67 @@ Querformat 16:9, mindestens 1408×768. **Keine Menschen, keine Gäste!**
 
 ---
 
-## 2. Cerealia-Character-Sheet (für Rigging/Animation)
+## 2. Cerealia-Character-Sheet v2 (Rigging)
 
-Ziel: Cerealia soll sich im Spiel bewegen können (winken, jubeln, nicken).
-Dafür rigge ich sie in Unity mit Bones — ich brauche die Körperteile
-**getrennt**. Referenzbild: `Tools/art/refs/cerealia_promo.png` (die
-Werbefigur — Gesicht, Frisur, Kleidung genau übernehmen).
+Ziel: `Tools/art/refs/cerealia_parts.png` überschreiben — ich zerlege das
+Sheet dann wieder automatisch und baue es in `CerealiaRig.cs` zusammen.
+Referenzbild anhängen: `Tools/art/refs/cerealia_promo.png`.
 
-Datei: `Tools/art/refs/cerealia_parts.png` (ich zerlege sie dann in Layer).
+**Warum eine neue Version?** Das erste Sheet hatte zwei Konstruktionsfehler,
+die man einem Bild nicht ansieht, die aber jede Animation kaputtmachen:
 
-> Character-Sheet der Comicfigur aus dem Referenzbild (junge Frau,
-> lockiges kastanienbraunes Haar, blaues Haarband, gestreiftes Shirt,
-> Küchenschürze, Jeansshorts) für Cutout-Animation. Auf neutralem
-> einfarbigem Hintergrund, sauber voneinander getrennt angeordnet:
-> Kopf mit neutralem Gesicht (Vorderansicht), Torso mit Schürze, linker
-> Arm und rechter Arm jeweils in zwei Segmenten (Ober-/Unterarm mit Hand),
-> linkes und rechtes Bein, dazu eine Reihe Extra-Elemente: offene Augen,
-> geschlossene Augen (Blinzeln), Zwinker-Auge, lächelnder Mund, offener
-> lachender Mund, staunender O-Mund, eine Hand mit Löffel. Alle Teile in
-> gleicher Größe/Beleuchtung, Vorderansicht, keine Überlappungen.
+1. **Ärmel am Torso statt am Arm.** Wenn das Shirt seine Ärmel aufgemalt hat,
+   bleibt beim Heben des Arms ein Ärmel-Stumpf am Körper zurück. Der Ärmel
+   muss Teil des Oberarms sein, der Torso ärmellos.
+2. **Haare, die über die Schultern fallen.** Die Haare gehören zum Kopf und
+   drehen mit ihm mit — liegen sie auf Torso und Brust, wirkt beim kleinsten
+   Kopfnicken der ganze Oberkörper verschoben. Die Frisur muss knapp unter
+   dem Kinn rund auslaufen.
 
-Dazu eine Ganzkörper-Standpose als Ersatz für den aktuellen Chibi-Sprite
-(`Assets/Resources/Cereals/cerealia.png`, quadratisch, transparenter oder
-einfarbiger Hintergrund):
+Beides steht deshalb ausdrücklich im Prompt:
+
+> Character-Sheet für Cutout-Animation der Comicfigur aus dem Referenzbild
+> (junge Frau, lockiges kastanienbraunes Haar, blaues Haarband, quergestreiftes
+> T-Shirt in Blau/Grün/Gelb, weiße Küchenschürze mit Obstmuster, Jeansshorts,
+> weiße Sneaker).
+>
+> Alle Einzelteile einzeln und vollständig zeichnen, mit deutlichem Abstand
+> nebeneinander angeordnet, auf einfarbigem hellgrauem Hintergrund. KEINE
+> Überlappungen, keine Schatten, keine Landschaft, keine Hintergrundobjekte,
+> kein Text. Alle Teile in Vorderansicht, gleiche Beleuchtung, gleicher
+> Maßstab — zusammengesetzt müssen sie exakt die Figur aus dem Referenzbild
+> ergeben.
+>
+> Folgende Teile:
+> 1. Kopf mit kompletter Frisur und Haarband als ein Stück, freundlich
+>    lächelnd mit geschlossenem Mund. Die Haare enden knapp unterhalb des
+>    Kinns und laufen unten rund aus — die Haare dürfen NICHT auf Schultern
+>    oder Brust liegen. Unten am Hals ein kurzer Halsstumpf.
+> 2. Derselbe Kopf noch einmal, identisch, aber mit offenem lachendem Mund.
+> 3. Torso: das gestreifte T-Shirt OHNE ÄRMEL (ärmellos, die Schultern rund
+>    und geschlossen ausgezeichnet), darunter die weiße Schürze und die
+>    Jeansshorts. Ohne Kopf, ohne Hals, ohne Arme, ohne Beine.
+> 4. Linker Oberarm und rechter Oberarm, jeweils MIT dem kurzen gestreiften
+>    T-Shirt-Ärmel am oberen Ende. Oben (Schulter) und unten (Ellbogen)
+>    rund auslaufend.
+> 5. Linker Unterarm und rechter Unterarm, jeweils mit entspannt geöffneter
+>    Hand, oben (Ellbogen) rund auslaufend.
+> 6. Ein zusätzlicher rechter Unterarm mit Hand, die einen Löffel hält.
+> 7. Linkes Bein und rechtes Bein, jeweils als ein Stück vom Oberschenkel
+>    bis zum weißen Sneaker, oben rund auslaufend.
+> 8. Ein Paar geöffnete Augen und ein Paar geschlossene Augen (zum Blinzeln).
+>
+> An allen Gelenken (Schulter, Ellbogen, Hals, Hüfte) etwas Material
+> zugeben, damit sich die Teile beim Drehen überlappen und keine Lücke
+> entsteht.
+
+**Falls die Teile nicht zusammenpassen** (häufigster Fehler: unterschiedliche
+Größen), hilft ein zweiter Versuch mit dem Zusatz: „Zeichne links im Bild
+zusätzlich die vollständige zusammengesetzte Figur als Größenreferenz, rechts
+daneben die Einzelteile im exakt gleichen Maßstab."
+
+Dazu — unabhängig vom Rig — eine Ganzkörper-Standpose für den Levelpfad
+(`Assets/Resources/Cereals/cerealia.png`, quadratisch):
 
 > Die Comicfigur aus dem Referenzbild als freundliche Ganzkörper-Standpose,
 > Vorderansicht, winkend mit der rechten Hand, in der linken eine
